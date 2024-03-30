@@ -1,18 +1,18 @@
 plugins {
-    id("root-plugin")
+    `root-plugin`
 }
 
 project.group = "us.crazycrew.crazycrates"
-project.version = "0.4"
+project.version = "0.4-SNAPSHOT"
 
 base {
     archivesName.set("${rootProject.name}-${project.name}")
 }
 
 dependencies {
-    compileOnlyApi(libs.bundles.adventure)
+    implementation(libs.cluster.api)
 
-    compileOnly(libs.configme)
+    compileOnly(libs.config.me)
 }
 
 java {
@@ -26,7 +26,11 @@ tasks {
     publishing {
         repositories {
             maven {
-                url = uri("https://repo.crazycrew.us/releases/")
+                if (project.version.toString().contains("SNAPSHOT")) {
+                    url = uri("https://repo.crazycrew.us/snapshots/")
+                } else {
+                    url = uri("https://repo.crazycrew.us/releases/")
+                }
 
                 credentials {
                     this.username = System.getenv("GRADLE_USERNAME")
@@ -38,7 +42,7 @@ tasks {
         publications {
             create<MavenPublication>("maven") {
                 group = project.group
-                artifactId = "api"
+                artifactId = project.name
                 version = "0.4"
 
                 from(component)

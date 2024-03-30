@@ -1,39 +1,66 @@
 plugins {
-    id("paper-plugin")
+    `paper-plugin`
+
+    id("io.papermc.paperweight.userdev")
+
+    alias(libs.plugins.run.paper)
+    alias(libs.plugins.shadow)
+}
+
+repositories {
+    maven("https://repo.oraxen.com/releases/")
 }
 
 dependencies {
-    implementation(project(":api"))
+    paperweight.paperDevBundle(libs.versions.bundle)
 
-    implementation(libs.cluster.paper)
+    implementation(libs.bundles.triumph)
 
-    implementation(libs.triumphcmds)
+    api(libs.cluster.paper) {
+        isTransitive = true
+    }
 
-    implementation(libs.configme) {
+    implementation(libs.config.me) {
         exclude(group = "org.yaml", module = "snakeyaml")
     }
 
     implementation(libs.metrics)
 
-    compileOnly(libs.holographicdisplays)
+    implementation(projects.api)
 
-    compileOnly(libs.decentholograms)
+    compileOnly(libs.head.database.api)
 
-    compileOnly(libs.placeholderapi)
+    compileOnly(libs.bundles.adventure)
 
-    compileOnly(libs.itemsadder)
+    compileOnly(libs.bundles.holograms)
 
-    compileOnly(libs.oraxen)
+    compileOnly(libs.placeholder.api)
+
+    compileOnly(libs.itemsadder.api)
+
+    compileOnly(libs.oraxen.api)
+
+    compileOnly(libs.vault)
 
     compileOnly(fileTree("libs").include("*.jar"))
 }
 
 tasks {
+    runServer {
+        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+
+        defaultCharacterEncoding = Charsets.UTF_8.name()
+
+        minecraftVersion("1.20.4")
+    }
+
     shadowJar {
+        archiveClassifier.set("")
+
         listOf(
-            "com.ryderbelserion.cluster.paper",
-            "de.tr7zw.changeme.nbtapi",
+            "com.ryderbelserion.cluster",
             "dev.triumphteam.cmd",
+            "dev.triumphteam.gui",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")

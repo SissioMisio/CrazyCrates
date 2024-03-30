@@ -2,13 +2,13 @@ package com.badbones69.crazycrates.api;
 
 import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.api.objects.Crate;
+import com.badbones69.crazycrates.platform.utils.MsgUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.api.enums.types.KeyType;
-import com.badbones69.crazycrates.api.FileManager.Files;
-import com.badbones69.crazycrates.api.utils.MsgUtils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,10 +28,9 @@ import java.util.logging.Level;
  */
 public class EventManager {
 
-    @NotNull
-    private final static CrazyCratesPaper plugin = CrazyCratesPaper.get();
+    private static final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
 
-    private final static String fileName = Files.LOGS.getFileName();
+    private static final String fileName = "";
 
     public static void logCrateEvent(Player player, Crate crate, KeyType keyType, boolean logFile, boolean logConsole) {
         if (logFile) {
@@ -104,15 +103,17 @@ public class EventManager {
 
     @SuppressWarnings("DEPRECATIONS")
     private static String setEntryData(String string, Player player, CommandSender sender, Crate crate, KeyType keyType) {
-        return string.replace("%player%", player.getName()).replace("%crate_name%", crate.getName()).replace("%sender%", sender.getName())
+        return "";
+        /*return string.replace("%player%", player.getName()).replace("%crate_name%", crate.getName()).replace("%sender%", sender.getName())
                 .replace("%crate_type%", crate.getCrateType().getName()).replace("%key_name%", crate.getKeyName())
-                .replace("%key_type%", keyType.getName()).replace("%key_item%", crate.getKey().getType().toString());
+                .replace("%key_type%", keyType.getName()).replace("%key_item%", crate.getKey().getType().toString());*/
     }
 
     private static String setEntryData(String string, OfflinePlayer player, CommandSender sender, Crate crate, KeyType keyType) {
-        return string.replace("%player%", player.getName()).replace("%crate_name%", crate.getName()).replace("%sender%", sender.getName())
+        return "";
+        /*return string.replace("%player%", player.getName()).replace("%crate_name%", crate.getName()).replace("%sender%", sender.getName())
                 .replace("%crate_type%", crate.getCrateType().getName()).replace("%key_name%", crate.getKeyName())
-                .replace("%key_type%", keyType.getName()).replace("%key_item%", crate.getKey().getType().toString());
+                .replace("%key_type%", keyType.getName()).replace("%key_item%", crate.getKey().getType().toString());*/
     }
 
     public enum KeyEventType {

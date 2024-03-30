@@ -1,46 +1,45 @@
 package com.badbones69.crazycrates.listeners.crates;
 
-import com.badbones69.crazycrates.api.PrizeManager;
+import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
+import com.badbones69.crazycrates.api.enums.Messages;
+import com.badbones69.crazycrates.api.enums.PersistentKeys;
+import com.badbones69.crazycrates.api.objects.Crate;
+import com.badbones69.crazycrates.api.objects.Prize;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.Item;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.meta.ItemMeta;
-import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.tasks.crates.other.quadcrates.QuadCrateManager;
 import com.badbones69.crazycrates.tasks.crates.other.quadcrates.SessionManager;
-import com.badbones69.crazycrates.api.objects.Crate;
-import com.badbones69.crazycrates.api.objects.Prize;
-import com.badbones69.crazycrates.api.enums.PersistentKeys;
-import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.api.ChestManager;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuadCrateListener implements Listener {
 
-    @NotNull
-    private final CrazyCratesPaper plugin = CrazyCratesPaper.get();
+    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
 
     private final SessionManager sessionManager = new SessionManager();
 
@@ -60,6 +59,8 @@ public class QuadCrateListener implements Listener {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             Block block = event.getClickedBlock();
 
+            if (block == null) return;
+
             if (session.getCrateLocations().contains(block.getLocation())) {
                 event.setCancelled(true);
 
@@ -68,9 +69,10 @@ public class QuadCrateListener implements Listener {
                 ChestManager.openChest(block, true);
 
                 Crate crate = session.getCrate();
+
                 Prize prize = crate.pickPrize(player, block.getLocation().add(.5, 1.3, .5));
 
-                PrizeManager.givePrize(player, prize, crate);
+                crate.givePrize(player, prize);
 
                 // Get the display item.
                 ItemStack display = prize.getDisplayItem(player);
@@ -81,7 +83,6 @@ public class QuadCrateListener implements Listener {
                 // Access the pdc and set "crazycrates-item"
                 PersistentKeys key = PersistentKeys.crate_prize;
 
-                //noinspection unchecked
                 itemMeta.getPersistentDataContainer().set(key.getNamespacedKey(), key.getType(), "1");
 
                 // Set the item meta.
@@ -99,7 +100,7 @@ public class QuadCrateListener implements Listener {
                 // Drop the item.
                 Item reward = player.getWorld().dropItem(block.getLocation().add(.5, 1, .5), item);
 
-                // Set data
+                /// Set data
                 reward.setMetadata("betterdrops_ignore", new FixedMetadataValue(plugin, true));
                 reward.setVelocity(new Vector(0, .2, 0));
                 reward.setCustomName(itemMeta.getDisplayName());
@@ -185,7 +186,7 @@ public class QuadCrateListener implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
 
-        if (this.sessionManager.inSession(player) && event.getCause() == TeleportCause.ENDER_PEARL) {
+        if (this.sessionManager.inSession(player) && event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
             event.setCancelled(true);
 
             Map<String, String> placeholders = new HashMap<>();

@@ -1,13 +1,13 @@
 package com.badbones69.crazycrates.api.builders;
 
 import com.badbones69.crazycrates.CrazyCratesPaper;
-import com.badbones69.crazycrates.api.enums.PersistentKeys;
-import com.badbones69.crazycrates.api.utils.MiscUtils;
-import com.badbones69.crazycrates.api.utils.MsgUtils;
+import com.badbones69.crazycrates.platform.utils.MiscUtils;
+import com.badbones69.crazycrates.platform.utils.MsgUtils;
 import com.badbones69.crazycrates.support.PluginSupport;
-import com.badbones69.crazycrates.support.SkullCreator;
+import com.badbones69.crazycrates.support.SkullSupport;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.ryderbelserion.cluster.utils.DyeUtils;
+import com.ryderbelserion.cluster.utils.RegistryUtils;
 import io.th0rgal.oraxen.api.OraxenItems;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.minecraft.nbt.TagParser;
@@ -21,37 +21,26 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ArmorMeta;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import us.crazycrew.crazycrates.platform.utils.EnchantUtil;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ItemBuilder {
 
-    @NotNull
-    private final CrazyCratesPaper plugin = CrazyCratesPaper.get();
+    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
 
     // Items
     private Material material = Material.STONE;
@@ -272,7 +261,7 @@ public class ItemBuilder {
     public ItemBuilder() {}
 
     private String parse(String message) {
-        if (PluginSupport.PLACEHOLDERAPI.isPluginEnabled() && this.target != null) {
+        if (PluginSupport.placeholderapi.isPluginEnabled() && this.target != null) {
             return MsgUtils.color(PlaceholderAPI.setPlaceholders(this.target, message));
         }
 
@@ -286,7 +275,7 @@ public class ItemBuilder {
      */
     public ItemStack build() {
         // Check if oraxen is enabled.
-        if (PluginSupport.ORAXEN.isPluginEnabled()) {
+        if (PluginSupport.oraxen.isPluginEnabled()) {
             // Get the item.
             io.th0rgal.oraxen.items.ItemBuilder oraxenItem = OraxenItems.getItemById(this.customMaterial);
 
@@ -310,9 +299,9 @@ public class ItemBuilder {
         if (this.isHead) { // Has to go 1st due to it removing all data when finished.
             if (this.isHash) { // Sauce: https://github.com/deanveloper/SkullCreator
                 if (this.isURL) {
-                    this.itemStack = SkullCreator.itemWithUrl(this.itemStack, this.player);
+                    this.itemStack = SkullSupport.itemWithUrl(this.itemStack, this.player);
                 } else {
-                    this.itemStack = SkullCreator.itemWithBase64(this.itemStack, this.player);
+                    this.itemStack = SkullSupport.itemWithBase64(this.itemStack, this.player);
                 }
             }
         }
@@ -331,9 +320,9 @@ public class ItemBuilder {
                 return CraftItemStack.asBukkitCopy(nmsItem);
             }
 
-            this.itemStack.setAmount(this.itemAmount);
+            getItemStack().setAmount(this.itemAmount);
 
-            this.itemStack.editMeta(itemMeta -> {
+            getItemStack().editMeta(itemMeta -> {
                 // If the item is able to be damaged.
                 if (itemMeta instanceof Damageable damageable) {
                     if (this.itemDamage >= 1) {
@@ -423,11 +412,11 @@ public class ItemBuilder {
                 itemMeta.setDisplayName(getUpdatedName());
                 itemMeta.setLore(getUpdatedLore());
 
-                if (!this.crateName.isBlank() || !this.crateName.isEmpty()) {
-                    PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+                //if (!this.crateName.isBlank() || !this.crateName.isEmpty()) {
+                //    PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
-                    container.set(PersistentKeys.crate_key.getNamespacedKey(), PersistentDataType.STRING, crateName);
-                }
+                //container.set(PersistentKeys.crate_key.getNamespacedKey(), PersistentDataType.STRING, crateName);
+                //}
             });
         } else {
             if (MiscUtils.isLogging()) {
@@ -439,7 +428,7 @@ public class ItemBuilder {
             }
         }
 
-        return this.itemStack;
+        return getItemStack();
     }
 
     public ItemStack getItemStack() {
@@ -528,6 +517,24 @@ public class ItemBuilder {
     }
 
     /**
+     * Set trim material
+     *
+     * @param trimMaterial pattern to set.
+     */
+    public void setTrimMaterial(TrimMaterial trimMaterial) {
+        this.trimMaterial = trimMaterial;
+    }
+
+    /**
+     * Set trim pattern
+     *
+     * @param trimPattern pattern to set.
+     */
+    public void setTrimPattern(TrimPattern trimPattern) {
+        this.trimPattern = trimPattern;
+    }
+
+    /**
      * Set the type of item and its metadata in the builder.
      *
      * @param type the string must be in this form: %Material% or %Material%:%MetaData%
@@ -574,7 +581,7 @@ public class ItemBuilder {
             if (isInt(metaData)) {
                 this.itemDamage = Integer.parseInt(metaData);
             } else {
-                this.potionType = getPotionType(PotionEffectType.getByName(metaData)).getEffectType();
+                this.potionType = RegistryUtils.getPotionEffect(metaData);
 
                 this.potionColor = DyeUtils.getColor(metaData);
                 this.armorColor = DyeUtils.getColor(metaData);
@@ -593,14 +600,14 @@ public class ItemBuilder {
             }
         }
 
-        Material material = Material.matchMaterial(type);
+        Material material = RegistryUtils.getMaterial(type.toLowerCase());
 
         if (material != null) {
             this.itemStack = new ItemStack(material);
 
             this.material = this.itemStack.getType();
         } else {
-            if (PluginSupport.ORAXEN.isPluginEnabled()) {
+            if (PluginSupport.oraxen.isPluginEnabled()) {
                 io.th0rgal.oraxen.items.ItemBuilder oraxenItem = OraxenItems.getItemById(this.customMaterial);
 
                 if (oraxenItem != null) {
@@ -634,22 +641,38 @@ public class ItemBuilder {
         return this;
     }
 
-    /**
-     * Set trim material
-     *
-     * @param trimMaterial pattern to set.
-     */
-    public void setTrimMaterial(TrimMaterial trimMaterial) {
-        this.trimMaterial = trimMaterial;
+    public ItemBuilder setString(NamespacedKey key, String value) {
+        this.itemStack.editMeta(meta -> meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, value));
+
+        return this;
     }
 
-    /**
-     * Set trim pattern
-     *
-     * @param trimPattern pattern to set.
-     */
-    public void setTrimPattern(TrimPattern trimPattern) {
-        this.trimPattern = trimPattern;
+    public boolean hasString(NamespacedKey key) {
+        ItemMeta meta = this.itemStack.getItemMeta();
+
+        if (meta == null) return false;
+
+        return meta.getPersistentDataContainer().has(key);
+    }
+
+    public String getString(String key) {
+        ItemMeta meta = this.itemStack.getItemMeta();
+
+        if (meta == null) return null;
+
+        return meta.getPersistentDataContainer().get(new NamespacedKey(this.plugin, key), PersistentDataType.STRING);
+    }
+
+    public ItemBuilder setBoolean(NamespacedKey key, boolean value) {
+        this.itemStack.editMeta(meta -> meta.getPersistentDataContainer().set(key, PersistentDataType.BOOLEAN, value));
+
+        return this;
+    }
+
+    public ItemBuilder removeTag(NamespacedKey key) {
+        this.itemStack.editMeta(meta -> meta.getPersistentDataContainer().remove(key));
+
+        return this;
     }
 
     /**
@@ -666,9 +689,12 @@ public class ItemBuilder {
 
     /**
      * @param damage the damage value of the item.
+     * @return the ItemBuilder with updated damage.
      */
-    public void setDamage(int damage) {
+    public ItemBuilder setDamage(int damage) {
         this.itemDamage = damage;
+
+        return this;
     }
 
     /**
@@ -876,7 +902,7 @@ public class ItemBuilder {
      * @param amount the amount of the item stack.
      * @return the ItemBuilder with an updated item count.
      */
-    public ItemBuilder setAmount(Integer amount) {
+    public ItemBuilder setAmount(int amount) {
         this.itemAmount = amount;
 
         return this;
@@ -922,6 +948,19 @@ public class ItemBuilder {
      */
     public ItemBuilder addEnchantment(Enchantment enchantment, int level, boolean unsafeEnchantments) {
         getItemStack().editMeta(itemMeta -> itemMeta.addEnchant(enchantment, level, unsafeEnchantments));
+
+        return this;
+    }
+
+    /**
+     * Adds a single enchantment to an item.
+     *
+     * @param enchantment the type of enchantment.
+     * @param level the level of the enchantment.
+     * @return the ItemBuilder with updated enchantments.
+     */
+    public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
+        getItemStack().editMeta(itemMeta -> itemMeta.addEnchant(enchantment, level, false));
 
         return this;
     }
@@ -1043,17 +1082,54 @@ public class ItemBuilder {
     }
 
     /**
+     * It will override any enchantments used in ItemBuilder.addEnchantment() below.
+     *
+     * @param enchantments a list of enchantments to add to the item.
+     * @return the ItemBuilder with a list of updated enchantments.
+     */
+    public ItemBuilder setEnchantments(HashMap<Enchantment, Integer> enchantments) {
+        if (enchantments != null) getItemStack().editMeta(meta -> enchantments.forEach((enchantment, amount) -> meta.addEnchant(enchantment, amount, false)));
+
+        return this;
+    }
+
+    /**
+     * Adds an enchantment to the item.
+     *
+     * @param enchantment the enchantment you wish to add.
+     * @param level the level of the enchantment ( Unsafe levels included )
+     * @return the ItemBuilder with updated enchantments.
+     */
+    public ItemBuilder addEnchantments(Enchantment enchantment, int level) {
+        getItemStack().editMeta(meta -> meta.addEnchant(enchantment, level, false));
+
+        return this;
+    }
+
+    /**
+     * Remove an enchantment from the item.
+     *
+     * @param enchantment the enchantment you wish to remove.
+     * @return the ItemBuilder with updated enchantments.
+     */
+    public ItemBuilder removeEnchantments(Enchantment enchantment) {
+        getItemStack().editMeta(meta -> meta.removeEnchant(enchantment));
+
+        return this;
+    }
+
+    /**
      * Convert an ItemStack to an ItemBuilder to allow easier editing of the ItemStack.
      *
      * @param item the ItemStack you wish to convert into an ItemBuilder.
      * @return the ItemStack as an ItemBuilder with all the info from the item.
      */
     public static ItemBuilder convertItemStack(ItemStack item) {
-        return new ItemBuilder(item).setAmount(item.getAmount()).addEnchantments(new HashMap<>(item.getEnchantments()), true);
+        return new ItemBuilder(item).setAmount(item.getAmount()).setEnchantments(new HashMap<>(item.getEnchantments()));
     }
 
     public static ItemBuilder convertItemStack(ItemStack item, Player player) {
-        return new ItemBuilder(item).setTarget(player).setAmount(item.getAmount()).addEnchantments(new HashMap<>(item.getEnchantments()), true);
+        return new ItemBuilder(item).setTarget(player).setAmount(item.getAmount()).setEnchantments(new HashMap<>(item.getEnchantments()));
     }
 
     /**
@@ -1110,13 +1186,13 @@ public class ItemBuilder {
                         if (!value.isEmpty()) itemBuilder.setTrimMaterial(Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(value.toLowerCase())));
                     }
                     default -> {
-                        Enchantment enchantment = getEnchantment(option);
+                        Enchantment enchantment = RegistryUtils.getEnchantment(EnchantUtil.getEnchant(option));
 
                         if (enchantment != null) {
                             try {
-                                itemBuilder.addEnchantment(enchantment, Integer.parseInt(value), true);
+                                itemBuilder.addEnchantments(enchantment, Integer.parseInt(value));
                             } catch (NumberFormatException e) {
-                                itemBuilder.addEnchantment(enchantment, 1, true);
+                                itemBuilder.addEnchantments(enchantment, 1);
                             }
 
                             break;
@@ -1125,6 +1201,7 @@ public class ItemBuilder {
                         for (ItemFlag itemFlag : ItemFlag.values()) {
                             if (itemFlag.name().equalsIgnoreCase(option)) {
                                 itemBuilder.addItemFlag(itemFlag);
+
                                 break;
                             }
                         }
@@ -1133,7 +1210,9 @@ public class ItemBuilder {
                             for (PatternType pattern : PatternType.values()) {
                                 if (option.equalsIgnoreCase(pattern.name()) || value.equalsIgnoreCase(pattern.getIdentifier())) {
                                     DyeColor color = DyeUtils.getDyeColor(value);
+
                                     if (color != null) itemBuilder.addPattern(new Pattern(color, pattern));
+
                                     break;
                                 }
                             }
@@ -1144,7 +1223,7 @@ public class ItemBuilder {
         } catch (Exception exception) {
             itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c" + (placeHolder != null ? placeHolder : "")));
 
-            CrazyCratesPaper plugin = CrazyCratesPaper.get();
+            CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
             plugin.getLogger().log(Level.WARNING, "An error has occurred with the item builder: ", exception);
         }
 
@@ -1212,85 +1291,6 @@ public class ItemBuilder {
         }
 
         return null;
-    }
-
-    /**
-     * Get the enchantment from a string.
-     *
-     * @param enchantmentName the string of the enchantment.
-     * @return the enchantment from the string.
-     */
-    private static Enchantment getEnchantment(String enchantmentName) {
-        enchantmentName = stripEnchantmentName(enchantmentName);
-
-        for (Enchantment enchantment : Enchantment.values()) {
-            try {
-                if (stripEnchantmentName(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) return enchantment;
-
-                Map<String, String> enchantments = getEnchantmentList();
-
-                if (stripEnchantmentName(enchantment.getName()).equalsIgnoreCase(enchantmentName) || (enchantments.get(enchantment.getName()) != null &&
-                        stripEnchantmentName(enchantments.get(enchantment.getName())).equalsIgnoreCase(enchantmentName))) return enchantment;
-            } catch (Exception ignore) {}
-        }
-
-        return null;
-    }
-
-    /**
-     * Strip extra characters from an enchantment name.
-     *
-     * @param enchantmentName the enchantment name.
-     * @return the stripped enchantment name.
-     */
-    private static String stripEnchantmentName(String enchantmentName) {
-        return enchantmentName != null ? enchantmentName.replace("-", "").replace("_", "").replace(" ", "") : null;
-    }
-
-    /**
-     * Get the list of enchantments and their in-Game names.
-     *
-     * @return the hashmap of enchantments and their in-game names.
-     */
-    private static Map<String, String> getEnchantmentList() {
-        Map<String, String> enchantments = new HashMap<>();
-
-        enchantments.put("ARROW_DAMAGE", "Power");
-        enchantments.put("ARROW_FIRE", "Flame");
-        enchantments.put("ARROW_INFINITE", "Infinity");
-        enchantments.put("ARROW_KNOCKBACK", "Punch");
-        enchantments.put("DAMAGE_ALL", "Sharpness");
-        enchantments.put("DAMAGE_ARTHROPODS", "Bane_Of_Arthropods");
-        enchantments.put("DAMAGE_UNDEAD", "Smite");
-        enchantments.put("DEPTH_STRIDER", "Depth_Strider");
-        enchantments.put("DIG_SPEED", "Efficiency");
-        enchantments.put("DURABILITY", "Unbreaking");
-        enchantments.put("FIRE_ASPECT", "Fire_Aspect");
-        enchantments.put("KNOCKBACK", "KnockBack");
-        enchantments.put("LOOT_BONUS_BLOCKS", "Fortune");
-        enchantments.put("LOOT_BONUS_MOBS", "Looting");
-        enchantments.put("LUCK", "Luck_Of_The_Sea");
-        enchantments.put("LURE", "Lure");
-        enchantments.put("OXYGEN", "Respiration");
-        enchantments.put("PROTECTION_ENVIRONMENTAL", "Protection");
-        enchantments.put("PROTECTION_EXPLOSIONS", "Blast_Protection");
-        enchantments.put("PROTECTION_FALL", "Feather_Falling");
-        enchantments.put("PROTECTION_FIRE", "Fire_Protection");
-        enchantments.put("PROTECTION_PROJECTILE", "Projectile_Protection");
-        enchantments.put("SILK_TOUCH", "Silk_Touch");
-        enchantments.put("THORNS", "Thorns");
-        enchantments.put("WATER_WORKER", "Aqua_Affinity");
-        enchantments.put("BINDING_CURSE", "Curse_Of_Binding");
-        enchantments.put("MENDING", "Mending");
-        enchantments.put("FROST_WALKER", "Frost_Walker");
-        enchantments.put("VANISHING_CURSE", "Curse_Of_Vanishing");
-        enchantments.put("SWEEPING_EDGE", "Sweeping_Edge");
-        enchantments.put("RIPTIDE", "Riptide");
-        enchantments.put("CHANNELING", "Channeling");
-        enchantments.put("IMPALING", "Impaling");
-        enchantments.put("LOYALTY", "Loyalty");
-
-        return enchantments;
     }
 
     /**

@@ -1,48 +1,55 @@
 package com.badbones69.crazycrates.tasks.crates.types;
 
-import com.badbones69.crazycrates.api.objects.Crate;
-import com.badbones69.crazycrates.api.objects.Prize;
-import com.badbones69.crazycrates.api.PrizeManager;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
-import com.badbones69.crazycrates.tasks.BukkitUserManager;
-import com.badbones69.crazycrates.tasks.crates.CrateManager;
+import com.badbones69.crazycrates.api.objects.Crate;
+import com.badbones69.crazycrates.platform.crates.UserManager;
+import com.badbones69.crazycrates.platform.crates.objects.Key;
+import com.badbones69.crazycrates.platform.utils.MiscUtils;
+import com.badbones69.crazycrates.platform.crates.CrateManager;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazycrates.api.enums.types.KeyType;
 import com.badbones69.crazycrates.api.builders.CrateBuilder;
-import com.badbones69.crazycrates.api.utils.MiscUtils;
+import us.crazycrew.crazycrates.api.enums.types.KeyType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CsgoCrate extends CrateBuilder {
 
-    @NotNull
-    private final CrateManager crateManager = this.plugin.getCrateManager();
+    private final @NotNull UserManager userManager = null;
+    private final @NotNull CrateManager crateManager = null;
 
-    @NotNull
-    private final BukkitUserManager userManager = this.plugin.getUserManager();
-
-    public CsgoCrate(Crate crate, Player player, int size) {
-        super(crate, player, size);
+    public CsgoCrate(Key key, Crate crate, Player player, int size) {
+        super(key, crate, player, size);
     }
 
     @Override
-    public void open(KeyType type, boolean checkHand) {
-        // Crate event failed so we return.
-        if (isCrateEventValid(type, checkHand)) {
+    public void open(KeyType keyType, boolean checkHand) {
+        if (isCrateEventValid(keyType, checkHand)) {
             return;
         }
 
-        boolean keyCheck = this.userManager.takeKeys(1, getPlayer().getUniqueId(), getCrate().getName(), type, checkHand);
+        Inventory inventory = getInventory();
 
-        if (!keyCheck) {
+        Crate crate = getCrate();
+        Key key = getKey();
+        Player player = getPlayer();
+
+        // Crate event failed so we return.
+        //boolean keyCheck = this.userManager.takeKeys(1, player.getUniqueId(), crate.getName(), key.getName(), true, checkHand);
+
+        if (!true) {
+            // Send the message about failing to take the key.
+            //MiscUtils.failedToTakeKey(player, crate.getName(), key.getName());
+
             // Remove from opening list.
-            this.crateManager.removePlayerFromOpeningList(getPlayer());
+            //this.crateManager.removePlayerFromOpeningList(player);
 
             return;
         }
@@ -51,7 +58,7 @@ public class CsgoCrate extends CrateBuilder {
         populate();
 
         // Open the inventory.
-        getPlayer().openInventory(getInventory());
+        player.openInventory(inventory);
 
         addCrateTask(new BukkitRunnable() {
             int time = 1;
@@ -64,6 +71,7 @@ public class CsgoCrate extends CrateBuilder {
             public void run() {
                 if (this.full <= 50) { // When Spinning
                     moveItemsAndSetGlass();
+
                     playSound("cycle-sound", SoundCategory.PLAYERS, "BLOCK_NOTE_BLOCK_XYLOPHONE");
                 }
 
@@ -88,24 +96,22 @@ public class CsgoCrate extends CrateBuilder {
                     if (this.time == 60) { // When done
                         playSound("stop-sound", SoundCategory.PLAYERS, "ENTITY_PLAYER_LEVELUP");
 
-                        plugin.getCrateManager().endCrate(getPlayer());
+                        //plugin.getCrateManager().endActiveTask(player);
 
                         ItemStack item = getInventory().getItem(13);
 
                         if (item != null) {
-                            Prize prize = getCrate().getPrize(item);
-
-                            PrizeManager.givePrize(getPlayer(), getCrate(), prize);
+                            crate.givePrize(player, crate.getPrize(item));
                         }
 
-                        crateManager.removePlayerFromOpeningList(getPlayer());
+                        //crateManager.removePlayerFromOpeningList(getPlayer());
 
                         cancel();
 
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (getPlayer().getOpenInventory().getTopInventory().equals(getInventory())) getPlayer().closeInventory();
+                                if (player.getOpenInventory().getTopInventory().equals(inventory)) player.closeInventory();
                             }
                         }.runTaskLater(plugin, 40);
                     } else if (this.time > 60) { // Added this due reports of the prizes spamming when low tps.
@@ -117,10 +123,14 @@ public class CsgoCrate extends CrateBuilder {
     }
 
     private void populate() {
-        HashMap<Integer, ItemStack> glass = new HashMap<>();
+        Map<Integer, ItemStack> glass = new HashMap<>();
+
+        Inventory inventory = getInventory();
+        Crate crate = getCrate();
+        Player player = getPlayer();
 
         for (int index = 0; index < 10; index++) {
-            if (index < 9 && index != 3) glass.put(index, getInventory().getItem(index));
+            if (index < 9 && index != 3) glass.put(index, inventory.getItem(index));
         }
 
         for (int index : glass.keySet()) {
@@ -131,7 +141,7 @@ public class CsgoCrate extends CrateBuilder {
         }
 
         for (int index = 1; index < 10; index++) {
-            if (index < 9 && index != 4) glass.put(index, getInventory().getItem(index));
+            if (index < 9 && index != 4) glass.put(index, inventory.getItem(index));
         }
 
         setItem(0, glass.get(1));
@@ -163,18 +173,20 @@ public class CsgoCrate extends CrateBuilder {
 
         // Set display items.
         for (int index = 9; index > 8 && index < 18; index++) {
-            setItem(index, getCrate().pickPrize(getPlayer()).getDisplayItem(getPlayer()));
+            setItem(index, crate.pickPrize(player).getDisplayItem(player));
         }
     }
 
     private void moveItemsAndSetGlass() {
+        Player player = getPlayer();
+
         List<ItemStack> items = new ArrayList<>();
 
         for (int i = 9; i > 8 && i < 17; i++) {
             items.add(getInventory().getItem(i));
         }
 
-        setItem(9, getCrate().pickPrize(getPlayer()).getDisplayItem(getPlayer()));
+        setItem(9, getCrate().pickPrize(player).getDisplayItem(player));
 
         for (int i = 0; i < 8; i++) {
             setItem(i + 10, items.get(i));

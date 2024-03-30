@@ -2,8 +2,8 @@ package com.badbones69.crazycrates.tasks;
 
 import ch.jalu.configme.SettingsManager;
 import com.badbones69.crazycrates.api.enums.PersistentKeys;
-import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
+import com.badbones69.crazycrates.api.objects.Crate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,11 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings("unchecked")
 public class InventoryManager {
 
-    @NotNull
-    private final SettingsManager config = ConfigManager.getConfig();
+    private final @NotNull SettingsManager config = ConfigManager.getConfig();
 
     private ItemBuilder menuButton;
     private ItemBuilder nextButton;
@@ -101,10 +99,10 @@ public class InventoryManager {
 
     private final Map<UUID, Crate> crateViewers = new HashMap<>();
 
-    public void openNewCratePreview(Player player, Crate crate) {
+    public void openNewCratePreview(Player player, Crate crate, boolean isTierPreview) {
         this.crateViewers.put(player.getUniqueId(), crate);
 
-        if (crate.isPreviewTierToggle()) {
+        if (isTierPreview) {
             player.openInventory(crate.getTierPreview(player));
             return;
         }
@@ -128,6 +126,7 @@ public class InventoryManager {
         this.pageViewers.remove(player.getUniqueId());
         this.viewers.remove(player.getUniqueId());
         this.crateViewers.remove(player.getUniqueId());
+
         player.closeInventory();
     }
 
@@ -162,7 +161,9 @@ public class InventoryManager {
     }
 
     public void setPage(Player player, int page) {
-        int max = this.crateViewers.get(player.getUniqueId()).getMaxPage();
+        UUID uuid = player.getUniqueId();
+
+        int max = this.crateViewers.get(uuid).getMaxPage();
 
         if (page < 1) {
             page = 1;
@@ -170,7 +171,7 @@ public class InventoryManager {
             page = max;
         }
 
-        this.pageViewers.put(player.getUniqueId(), page);
+        this.pageViewers.put(uuid, page);
     }
 
     private final List<UUID> viewers = new ArrayList<>();

@@ -1,10 +1,11 @@
 package com.badbones69.crazycrates.tasks.crates.effects;
 
+import com.ryderbelserion.cluster.utils.RegistryUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.simpleyaml.configuration.ConfigurationSection;
 
 public class SoundEffect {
 

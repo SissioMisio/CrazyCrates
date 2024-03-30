@@ -16,25 +16,25 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
 import com.badbones69.crazycrates.api.builders.InventoryBuilder;
-import us.crazycrew.crazycrates.api.enums.types.CrateType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class CratePreviewMenu extends InventoryBuilder {
 
-    @NotNull
-    private final InventoryManager inventoryManager = this.plugin.getInventoryManager();
+    private final @NotNull InventoryManager inventoryManager = null;
 
     private final boolean isTier;
     private final Tier tier;
 
-    public CratePreviewMenu(Crate crate, Player player, int size, int page, String title, boolean isTier, Tier tier) {
-        super(crate, player, size, page, title);
+    public CratePreviewMenu(String guiName, int rows, int page, Player player, Crate crate, boolean isTier, Tier tier) {
+        super(guiName, rows, page, player, crate);
 
         this.isTier = isTier;
         this.tier = tier;
@@ -42,7 +42,7 @@ public class CratePreviewMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        Inventory inventory = getInventory();
+        Inventory inventory = getGui().getInventory();
 
         setDefaultItems(inventory);
 
@@ -60,50 +60,56 @@ public class CratePreviewMenu extends InventoryBuilder {
     }
 
     private void setDefaultItems(Inventory inventory) {
-        if (getCrate().isBorderToggle()) {
+        Crate crate = getCrate();
+        Player player = getPlayer();
+
+        if (crate.isPreviewToggle()) {
             List<Integer> borderItems = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8);
 
             for (int i : borderItems) { // Top Border slots
-                inventory.setItem(i, getCrate().getBorderItem().setTarget(getPlayer()).build());
+                inventory.setItem(i, crate.getFillerItem(player));
             }
 
-            borderItems.replaceAll(getCrate()::getAbsoluteItemPosition);
+            borderItems.replaceAll(crate::getAbsoluteItemPosition);
 
             for (int i : borderItems) { // Bottom Border slots
-                inventory.setItem(i, getCrate().getBorderItem().setTarget(getPlayer()).build());
+                inventory.setItem(i, crate.getFillerItem(player));
             }
         }
 
-        int page = this.inventoryManager.getPage(getPlayer());
+        int page = this.inventoryManager.getPage(player);
 
-        if (this.inventoryManager.inCratePreview(getPlayer()) && ConfigManager.getConfig().getProperty(ConfigKeys.enable_crate_menu)) {
-            inventory.setItem(getCrate().getAbsoluteItemPosition(4), this.inventoryManager.getMenuButton(getPlayer()));
+        if (this.inventoryManager.inCratePreview(player) && ConfigManager.getConfig().getProperty(ConfigKeys.enable_crate_menu)) {
+            inventory.setItem(crate.getAbsoluteItemPosition(4), this.inventoryManager.getMenuButton(player));
         }
 
         if (page == 1) {
-            if (getCrate().isBorderToggle()) {
-                inventory.setItem(getCrate().getAbsoluteItemPosition(3), getCrate().getBorderItem().setTarget(getPlayer()).build());
+            if (crate.isPreviewToggle()) {
+                inventory.setItem(crate.getAbsoluteItemPosition(3), crate.getFillerItem(player));
             }
         } else {
-            inventory.setItem(getCrate().getAbsoluteItemPosition(3), this.inventoryManager.getBackButton(getPlayer()));
+            inventory.setItem(crate.getAbsoluteItemPosition(3), this.inventoryManager.getBackButton(player));
         }
 
-        if (page == getCrate().getMaxPage()) {
-            if (getCrate().isBorderToggle()) {
-                inventory.setItem(getCrate().getAbsoluteItemPosition(5), getCrate().getBorderItem().setTarget(getPlayer()).build());
+        if (page == crate.getMaxPage()) {
+            if (crate.isPreviewToggle()) {
+                inventory.setItem(crate.getAbsoluteItemPosition(5), crate.getFillerItem(player));
             }
         } else {
-            inventory.setItem(getCrate().getAbsoluteItemPosition(5), this.inventoryManager.getNextButton(getPlayer()));
+            inventory.setItem(crate.getAbsoluteItemPosition(5), this.inventoryManager.getNextButton(player));
         }
     }
 
     private List<ItemStack> getPageItems(int page) {
-        List<ItemStack> list = !this.isTier ? getCrate().getPreviewItems(getPlayer()) : getCrate().getPreviewItems(this.tier, getPlayer());
+        Crate crate = getCrate();
+        Player player = getPlayer();
+
+        List<ItemStack> list = !this.isTier ? crate.getPreviewItems(player) : crate.getPreviewItems(this.tier, player);
         List<ItemStack> items = new ArrayList<>();
 
         if (page <= 0) page = 1;
 
-        int max = getCrate().getMaxSlots() - (getCrate().isBorderToggle() ? 18 : getCrate().getMaxSlots() >= list.size() ? 0 : getCrate().getMaxSlots() != 9 ? 9 : 0);
+        int max = getCrate().getMaxSlots() - (crate.isFillerToggle() ? 18 : crate.getMaxSlots() >= list.size() ? 0 : crate.getMaxSlots() != 9 ? 9 : 0);
         int index = page * max - max;
         int endIndex = index >= list.size() ? list.size() - 1 : index + max;
 
@@ -113,6 +119,7 @@ public class CratePreviewMenu extends InventoryBuilder {
 
         for (; items.isEmpty(); page--) {
             if (page <= 0) break;
+
             index = page * max - max;
             endIndex = index >= list.size() ? list.size() - 1 : index + max;
 
@@ -126,14 +133,11 @@ public class CratePreviewMenu extends InventoryBuilder {
 
     public static class CratePreviewListener implements Listener {
 
-        @NotNull
-        private final CrazyCratesPaper plugin = CrazyCratesPaper.get();
+        private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
 
-        @NotNull
-        private final InventoryManager inventoryManager = this.plugin.getInventoryManager();
+        private final @NotNull InventoryManager inventoryManager = null;
 
-        @NotNull
-        private final SettingsManager config = ConfigManager.getConfig();
+        private final @NotNull SettingsManager config = ConfigManager.getConfig();
 
         @EventHandler
         public void onInventoryClick(InventoryClickEvent event) {
@@ -163,20 +167,20 @@ public class CratePreviewMenu extends InventoryBuilder {
                 if (this.inventoryManager.inCratePreview(player)) {
                     if (holder.overrideMenu()) return;
 
-                    crate.playSound(player, player.getLocation(), "click-sound","UI_BUTTON_CLICK", SoundCategory.PLAYERS);
+                    crate.playSound(player,"click-sound","UI_BUTTON_CLICK", SoundCategory.PLAYERS);
 
-                    if (crate.isPreviewTierToggle() && crate.getCrateType() == CrateType.casino || crate.getCrateType() == CrateType.cosmic) {
-                        player.openInventory(crate.getTierPreview(player));
+                    //if (crate.getCrateType() == CrateType.casino || crate.getCrateType() == CrateType.cosmic) {
+                    //    player.openInventory(crate.getTierPreview(player));
 
-                        return;
-                    }
+                    //    return;
+                    //}
 
                     this.inventoryManager.removeViewer(player);
                     this.inventoryManager.closeCratePreview(player);
 
-                    CrateMainMenu crateMainMenu = new CrateMainMenu(player, this.config.getProperty(ConfigKeys.inventory_size), this.config.getProperty(ConfigKeys.inventory_name));
+                    //CrateMainMenu crateMainMenu = new CrateMainMenu(player, this.config.getProperty(ConfigKeys.inventory_size), this.config.getProperty(ConfigKeys.inventory_name));
 
-                    player.openInventory(crateMainMenu.build().getInventory());
+                    //player.openInventory(crateMainMenu.build().getGui().getInventory());
                 }
 
                 return;
@@ -184,7 +188,7 @@ public class CratePreviewMenu extends InventoryBuilder {
 
             if (container.has(PersistentKeys.next_button.getNamespacedKey())) {  // Clicked the next button.
                 if (this.inventoryManager.getPage(player) < crate.getMaxPage()) {
-                    crate.playSound(player, player.getLocation(), "click-sound","UI_BUTTON_CLICK", SoundCategory.PLAYERS);
+                    crate.playSound(player,"click-sound","UI_BUTTON_CLICK", SoundCategory.PLAYERS);
 
                     this.inventoryManager.nextPage(player);
 
@@ -196,7 +200,7 @@ public class CratePreviewMenu extends InventoryBuilder {
 
             if (container.has(PersistentKeys.back_button.getNamespacedKey())) {  // Clicked the back button.
                 if (this.inventoryManager.getPage(player) > 1 && this.inventoryManager.getPage(player) <= crate.getMaxPage()) {
-                    crate.playSound(player, player.getLocation(), "click-sound","UI_BUTTON_CLICK", SoundCategory.PLAYERS);
+                    crate.playSound(player,"click-sound","UI_BUTTON_CLICK", SoundCategory.PLAYERS);
 
                     this.inventoryManager.backPage(player);
 

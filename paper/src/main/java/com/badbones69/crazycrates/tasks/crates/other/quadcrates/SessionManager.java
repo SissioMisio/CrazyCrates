@@ -1,6 +1,7 @@
 package com.badbones69.crazycrates.tasks.crates.other.quadcrates;
 
 import org.bukkit.entity.Player;
+import java.util.List;
 
 public class SessionManager {
 
@@ -11,9 +12,11 @@ public class SessionManager {
      * @return true or false.
      */
     public boolean inSession(Player player) {
-        if (QuadCrateManager.getCrateSessions().isEmpty()) return false;
+        List<QuadCrateManager> sessions = QuadCrateManager.getCrateSessions();
 
-        for (QuadCrateManager quadCrateManager : QuadCrateManager.getCrateSessions()) {
+        if (sessions.isEmpty()) return false;
+
+        for (QuadCrateManager quadCrateManager : sessions) {
             if (quadCrateManager.getPlayer().getUniqueId() == player.getUniqueId()) return true;
         }
 
@@ -27,7 +30,9 @@ public class SessionManager {
      * @return crate session or null.
      */
     public QuadCrateManager getSession(Player player) {
-        for (QuadCrateManager quadCrateManager : QuadCrateManager.getCrateSessions()) {
+        List<QuadCrateManager> sessions = QuadCrateManager.getCrateSessions();
+
+        for (QuadCrateManager quadCrateManager : sessions) {
             if (quadCrateManager.getPlayer().getUniqueId() == player.getUniqueId()) return quadCrateManager;
         }
 
@@ -38,9 +43,11 @@ public class SessionManager {
      * End all crates.
      */
     public static void endCrates() {
-        if (!QuadCrateManager.getCrateSessions().isEmpty()) {
-            QuadCrateManager.getCrateSessions().forEach(session -> session.endCrateForce(false));
-            QuadCrateManager.getCrateSessions().clear();
+        List<QuadCrateManager> sessions = QuadCrateManager.getCrateSessions();
+
+        if (!sessions.isEmpty()) {
+            sessions.forEach(session -> session.endCrateForce(false));
+            sessions.clear();
         }
     }
 }

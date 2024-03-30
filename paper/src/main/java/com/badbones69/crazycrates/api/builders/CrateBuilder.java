@@ -1,32 +1,33 @@
 package com.badbones69.crazycrates.api.builders;
 
+import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.api.builders.types.CratePrizeMenu;
+import com.badbones69.crazycrates.api.events.CrateOpenEvent;
 import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.api.objects.Tier;
+import com.badbones69.crazycrates.platform.crates.objects.Key;
+import com.badbones69.crazycrates.platform.utils.MiscUtils;
 import com.badbones69.crazycrates.tasks.crates.effects.SoundEffect;
 import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
+import org.simpleyaml.configuration.ConfigurationSection;
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
 import us.crazycrew.crazycrates.api.enums.types.KeyType;
-import com.badbones69.crazycrates.CrazyCratesPaper;
-import com.badbones69.crazycrates.api.events.CrateOpenEvent;
-import com.badbones69.crazycrates.api.utils.MiscUtils;
+
 import java.util.List;
 
 public abstract class CrateBuilder extends BukkitRunnable {
 
-    @NotNull
-    protected final CrazyCratesPaper plugin = CrazyCratesPaper.get();
+    protected final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
 
     private final InventoryBuilder builder;
     private final Inventory inventory;
@@ -34,87 +35,104 @@ public abstract class CrateBuilder extends BukkitRunnable {
     private final Player player;
     private final Crate crate;
     private final int size;
+    private final Key key;
 
     /**
      * Create a crate with inventory size.
      *
      * @param crate crate opened by player.
+     * @param key key that opened the crate.
      * @param player player opening crate.
      * @param size size of inventory.
      */
-    public CrateBuilder(Crate crate, Player player, int size) {
+    public CrateBuilder(Key key, Crate crate, Player player, int size) {
+        Preconditions.checkNotNull(key, "Key can't be null.");
         Preconditions.checkNotNull(crate, "Crate can't be null.");
         Preconditions.checkNotNull(player, "Player can't be null.");
 
         this.crate = crate;
+
+        this.key = key;
 
         this.location = player.getLocation();
 
         this.player = player;
         this.size = size;
 
-        this.builder = new CratePrizeMenu(crate, player, size, crate.getCrateInventoryName());
-        this.inventory = this.builder.build().getInventory();
+        this.builder = new CratePrizeMenu(crate.getPreviewName(), size, player, crate);
+        this.inventory = this.builder.build().getGui().getInventory();
     }
 
     /**
      * Create a crate with inventory size.
      *
      * @param crate crate opened by player.
+     * @param key key that opened the crate.
      * @param player player opening crate.
      * @param size size of inventory.
      * @param crateName crate name of crate.
      */
-    public CrateBuilder(Crate crate, Player player, int size, String crateName) {
+    public CrateBuilder(Key key, Crate crate, Player player, int size, String crateName) {
+        Preconditions.checkNotNull(key, "Key can't be null.");
         Preconditions.checkNotNull(crate, "Crate can't be null.");
         Preconditions.checkNotNull(player, "Player can't be null.");
 
         this.crate = crate;
+
+        this.key = key;
 
         this.location = player.getLocation();
 
         this.player = player;
         this.size = size;
 
-        this.builder = new CratePrizeMenu(crate, player, size, crateName);
-        this.inventory = this.builder.build().getInventory();
+        this.builder = new CratePrizeMenu(crateName, size, player, crate);
+        this.inventory = this.builder.build().getGui().getInventory();
     }
 
     /**
      * Create a crate with inventory size.
      *
      * @param crate crate opened by player.
+     * @param key key that opened the crate.
      * @param player player opening crate.
      * @param size size of inventory.
      * @param location location of player.
      */
-    public CrateBuilder(Crate crate, Player player, int size, Location location) {
+    public CrateBuilder(Key key, Crate crate, Player player, int size, Location location) {
+        Preconditions.checkNotNull(key, "Key can't be null.");
         Preconditions.checkNotNull(crate, "Crate can't be null.");
         Preconditions.checkNotNull(player, "Player can't be null.");
         Preconditions.checkNotNull(location, "Location can't be null.");
 
         this.crate = crate;
 
+        this.key = key;
+
         this.location = location;
 
         this.player = player;
         this.size = size;
 
-        this.builder = new CratePrizeMenu(crate, player, size, crate.getCrateInventoryName());
-        this.inventory = this.builder.build().getInventory();
+        this.builder = new CratePrizeMenu(crate.getPreviewName(), size, player, crate);
+        this.inventory = this.builder.build().getGui().getInventory();
     }
 
     /**
      * Create a crate with no inventory size.
      *
      * @param crate crate opened by player.
+     * @param key key that opened the crate.
      * @param player player opening crate.
      */
-    public CrateBuilder(Crate crate, Player player) {
+    public CrateBuilder(Key key, Crate crate, Player player) {
+        Preconditions.checkNotNull(key, "Key can't be null.");
         Preconditions.checkNotNull(crate, "Crate can't be null.");
         Preconditions.checkNotNull(player, "Player can't be null.");
 
         this.crate = crate;
+
+        this.key = key;
 
         this.location = player.getLocation();
 
@@ -129,15 +147,19 @@ public abstract class CrateBuilder extends BukkitRunnable {
      * Create a crate with no inventory size.
      *
      * @param crate crate opened by player.
+     * @param key key that opened the crate.
      * @param player player opening crate.
      * @param location location of player.
      */
-    public CrateBuilder(Crate crate, Player player, Location location) {
+    public CrateBuilder(Key key, Crate crate, Player player, Location location) {
+        Preconditions.checkNotNull(key, "Key can't be null.");
         Preconditions.checkNotNull(crate, "Crate can't be null.");
         Preconditions.checkNotNull(player, "Player can't be null.");
         Preconditions.checkNotNull(location, "Location can't be null.");
 
         this.crate = crate;
+
+        this.key = key;
 
         this.location = location;
 
@@ -162,14 +184,14 @@ public abstract class CrateBuilder extends BukkitRunnable {
      * @param task task to add.
      */
     public void addCrateTask(BukkitTask task) {
-        this.plugin.getCrateManager().addCrateTask(this.player, task);
+        //this.plugin.getCrateManager().addActiveTask(this.player, task);
     }
 
     /**
      * Remove crate task.
      */
     public void removeTask() {
-        this.plugin.getCrateManager().removeCrateTask(this.player);
+        //this.plugin.getCrateManager().removeCrateTask(this.player);
     }
 
     /**
@@ -177,7 +199,7 @@ public abstract class CrateBuilder extends BukkitRunnable {
      */
     public void cancelCrateTask() {
         // Cancel
-        this.plugin.getCrateManager().getCrateTask(this.player).cancel();
+        //this.plugin.getCrateManager().getCrateTask(this.player).cancel();
 
         // Remove the task.
         removeTask();
@@ -187,7 +209,8 @@ public abstract class CrateBuilder extends BukkitRunnable {
      * @return true or false.
      */
     public boolean hasCrateTask() {
-        return this.plugin.getCrateManager().hasCrateTask(this.player);
+        return true;
+        //return this.plugin.getCrateManager().hasActiveTask(this.player);
     }
 
     /**
@@ -199,11 +222,19 @@ public abstract class CrateBuilder extends BukkitRunnable {
     }
 
     /**
+     * @return key that opened the crate.
+     */
+    @NotNull
+    public Key getKey() {
+        return this.key;
+    }
+
+    /**
      * @return title of the crate.
      */
     @NotNull
     public String getTitle() {
-        return this.crate.getCrateInventoryName();
+        return this.crate.getPreviewName();
     }
 
     /**
@@ -235,16 +266,15 @@ public abstract class CrateBuilder extends BukkitRunnable {
      *
      * @return true or false.
      */
-    public boolean isCosmicCrate() {
-        return this.crate.getCrateType() == CrateType.cosmic;
-    }
+    //public boolean isCosmicCrate() {
+    //    return this.crate.getCrateType() == CrateType.cosmic;
+    //}
 
     /**
      * @return file configuration of crate.
      */
-    @NotNull
-    public FileConfiguration getFile() {
-        return this.crate.getFile();
+    public ConfigurationSection getFile() {
+        return this.crate.getSection();
     }
 
     /**
@@ -331,7 +361,7 @@ public abstract class CrateBuilder extends BukkitRunnable {
      * @return true if cancelled otherwise false.
      */
     public boolean isCrateEventValid(KeyType keyType, boolean checkHand) {
-        CrateOpenEvent event = new CrateOpenEvent(this.player, this.crate, keyType, checkHand, this.crate.getFile());
+        CrateOpenEvent event = new CrateOpenEvent(this.player, this.crate, keyType, checkHand, this.crate.getSection());
         event.callEvent();
 
         if (event.isCancelled()) {
@@ -355,6 +385,7 @@ public abstract class CrateBuilder extends BukkitRunnable {
     @Override
     public void cancel() {
         super.cancel();
+
         this.isCancelled = true;
     }
 
@@ -380,7 +411,7 @@ public abstract class CrateBuilder extends BukkitRunnable {
      * @param fallback fallback sound in case no sound is found.
      */
     public void playSound(String type, SoundCategory category, String fallback) {
-        ConfigurationSection section = getFile().getConfigurationSection("Crate.sound");
+        ConfigurationSection section = getFile().getConfigurationSection("sound");
 
         if (section != null) {
             SoundEffect sound = new SoundEffect(

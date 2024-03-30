@@ -1,83 +1,87 @@
 package com.badbones69.crazycrates.api.builders;
 
 import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.api.objects.Tier;
-import com.badbones69.crazycrates.api.utils.MiscUtils;
+import com.badbones69.crazycrates.platform.utils.MiscUtils;
+import com.ryderbelserion.cluster.utils.AdvUtils;
+import dev.triumphteam.gui.builder.item.ItemBuilder;
+import dev.triumphteam.gui.components.GuiAction;
+import dev.triumphteam.gui.guis.Gui;
+import dev.triumphteam.gui.guis.GuiItem;
+import net.kyori.adventure.text.Component;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
-import com.badbones69.crazycrates.CrazyCratesPaper;
-import com.badbones69.crazycrates.api.utils.MsgUtils;
 import java.util.List;
-import static java.util.regex.Matcher.quoteReplacement;
 
-@SuppressWarnings("ALL")
-public abstract class InventoryBuilder implements InventoryHolder {
+public abstract class InventoryBuilder {
 
-    @NotNull
-    protected final CrazyCratesPaper plugin = CrazyCratesPaper.get();
+    protected final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
 
-    private final Inventory inventory;
-    private final Player player;
-    private String title;
-    private Crate crate;
-    private int size;
-    private int page;
+    private Component title;
     private List<Tier> tiers;
+    private final Gui gui;
+    private Player player;
+    private String guiName;
+    private Crate crate;
+    private int rows;
+    private int page;
 
-    public InventoryBuilder(Player player, int size, String title) {
-        this.title = title;
+    public InventoryBuilder(String guiName, int rows, Player player) {
+        this.guiName = guiName;
         this.player = player;
-        this.size = size;
+        this.rows = rows;
 
-        String inventoryTitle = MiscUtils.isPapiActive() ? PlaceholderAPI.setPlaceholders(getPlayer(), MsgUtils.color(this.title)) : MsgUtils.color(this.title);
+        this.title = MiscUtils.isPapiActive() ? AdvUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : AdvUtils.parse(this.guiName);
 
-        this.inventory = this.plugin.getServer().createInventory(this, this.size, inventoryTitle);
+        this.gui = Gui.gui().title(this.title).rows(this.rows).apply(consumer -> consumer.setDefaultTopClickAction(event -> event.setCancelled(true))).create();
     }
 
-    public InventoryBuilder(Crate crate, Player player, int size, String title) {
-        this.title = title;
+    public InventoryBuilder(String guiName, int rows, Player player, Crate crate) {
+        this.guiName = guiName;
         this.player = player;
-        this.size = size;
+        this.rows = rows;
 
         this.crate = crate;
 
-        String inventoryTitle = MiscUtils.isPapiActive() ? PlaceholderAPI.setPlaceholders(getPlayer(), MsgUtils.color(this.title)) : MsgUtils.color(this.title);
+        this.title = MiscUtils.isPapiActive() ? AdvUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : AdvUtils.parse(this.guiName);
 
-        this.inventory = this.plugin.getServer().createInventory(this, this.size, inventoryTitle);
+        this.gui = Gui.gui().title(this.title).rows(this.rows).apply(consumer -> consumer.setDefaultTopClickAction(event -> event.setCancelled(true))).create();
     }
 
-    public InventoryBuilder(Crate crate, Player player, int size, int page, String title) {
-        this.title = title;
+    public InventoryBuilder(String guiName, int rows, int page, Player player, Crate crate) {
+        this.guiName = guiName;
         this.player = player;
-        this.size = size;
+        this.rows = rows;
         this.page = page;
 
         this.crate = crate;
 
-        String inventoryTitle = MiscUtils.isPapiActive() ? PlaceholderAPI.setPlaceholders(getPlayer(), MsgUtils.color(this.title)) : MsgUtils.color(this.title);
+        this.title = MiscUtils.isPapiActive() ? AdvUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : AdvUtils.parse(this.guiName);
 
-        this.inventory = this.plugin.getServer().createInventory(this, this.size, inventoryTitle);
+        this.gui = Gui.gui().title(this.title).rows(this.rows).apply(consumer -> consumer.setDefaultTopClickAction(event -> event.setCancelled(true))).create();
     }
 
-    public InventoryBuilder(List<Tier> tiers, Crate crate, Player player, int size, String title) {
-        this.title = title;
+    public InventoryBuilder(String guiName, int rows, Player player, Crate crate, List<Tier> tiers) {
+        this.guiName = guiName;
         this.player = player;
-        this.size = size;
+        this.rows = rows;
 
         this.crate = crate;
 
         this.tiers = tiers;
 
-        String inventoryTitle = MiscUtils.isPapiActive() ? PlaceholderAPI.setPlaceholders(getPlayer(), MsgUtils.color(this.title)) : MsgUtils.color(this.title);
+        this.title = MiscUtils.isPapiActive() ? AdvUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : AdvUtils.parse(this.guiName);
 
-        this.inventory = this.plugin.getServer().createInventory(this, this.size, inventoryTitle);
+        this.gui = Gui.gui().title(this.title).rows(this.rows).apply(consumer -> consumer.setDefaultTopClickAction(event -> event.setCancelled(true))).create();
     }
 
     public boolean overrideMenu() {
@@ -88,10 +92,9 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
             if (!commands.isEmpty()) {
                 commands.forEach(value -> {
-                    String command = value.replaceAll("%player%", quoteReplacement(player.getName()))
-                            .replaceAll("%crate%", quoteReplacement(crate.getName()));
+                    //String command = value.replaceAll("%player%", quoteReplacement(player.getName())).replaceAll("%crate%", quoteReplacement(crate.getName()));
 
-                    MiscUtils.sendCommand(command);
+                    //MiscUtils.sendCommand(command);
                 });
 
                 return true;
@@ -107,12 +110,18 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
     public abstract InventoryBuilder build();
 
-    public void size(int size) {
-        this.size = size;
+    public InventoryBuilder setPlayer(Player player) {
+        this.player = player;
+
+        return this;
     }
 
-    public int getSize() {
-        return this.size;
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getRows() {
+        return this.rows;
     }
 
     public void setPage(int page) {
@@ -127,12 +136,12 @@ public abstract class InventoryBuilder implements InventoryHolder {
         return this.crate;
     }
 
-    public void title(String title) {
-        this.title = title;
+    public void setGuiName(String guiName) {
+        this.guiName = guiName;
     }
 
-    public boolean contains(String message) {
-        return this.title.contains(message);
+    public boolean containsString(String message) {
+        return this.guiName.contains(message);
     }
 
     public Player getPlayer() {
@@ -147,9 +156,15 @@ public abstract class InventoryBuilder implements InventoryHolder {
         return getPlayer().getOpenInventory();
     }
 
-    @Override
-    @NotNull
-    public Inventory getInventory() {
-        return this.inventory;
+    public @NotNull GuiItem getItem(ItemStack itemStack, @NotNull final GuiAction<InventoryClickEvent> action) {
+        return ItemBuilder.from(itemStack).asGuiItem(action);
+    }
+
+    public @NotNull GuiItem getItem(ItemStack itemStack) {
+        return ItemBuilder.from(itemStack).asGuiItem();
+    }
+
+    public @NotNull Gui getGui() {
+        return this.gui;
     }
 }

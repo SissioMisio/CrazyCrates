@@ -1,58 +1,63 @@
 package com.badbones69.crazycrates.tasks.crates.types;
 
-import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
-import com.badbones69.crazycrates.tasks.BukkitUserManager;
-import com.badbones69.crazycrates.tasks.crates.CrateManager;
+import com.badbones69.crazycrates.api.builders.types.CratePrizeMenu;
+import com.badbones69.crazycrates.api.objects.Crate;
+import com.badbones69.crazycrates.platform.crates.UserManager;
+import com.badbones69.crazycrates.platform.crates.objects.Key;
+import com.badbones69.crazycrates.platform.utils.MiscUtils;
+import com.badbones69.crazycrates.platform.crates.CrateManager;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazycrates.api.enums.types.KeyType;
 import com.badbones69.crazycrates.api.builders.CrateBuilder;
-import com.badbones69.crazycrates.api.builders.types.CratePrizeMenu;
-import com.badbones69.crazycrates.api.utils.MiscUtils;
+import us.crazycrew.crazycrates.api.enums.types.KeyType;
 import java.util.HashMap;
 import java.util.Map;
 
 public class WarCrate extends CrateBuilder {
 
-    @NotNull
-    private final CrateManager crateManager = this.plugin.getCrateManager();
-
-    @NotNull
-    private final BukkitUserManager userManager = this.plugin.getUserManager();
+    private final @NotNull UserManager userManager = null;
+    private final @NotNull CrateManager crateManager = null;
 
     private final Map<ItemStack, String> colorCodes = new HashMap<>();
 
-    public WarCrate(Crate crate, Player player, int size) {
-        super(crate, player, size);
+    public WarCrate(Key key, Crate crate, Player player, int size) {
+        super(key, crate, player, size);
     }
 
     @Override
-    public void open(KeyType type, boolean checkHand) {
-        // Crate event failed so we return.
-        if (isCrateEventValid(type, checkHand)) {
+    public void open(KeyType keyType, boolean checkHand) {
+        if (isCrateEventValid(keyType, checkHand)) {
             return;
         }
 
-        boolean keyCheck = this.userManager.takeKeys(1, getPlayer().getUniqueId(), getCrate().getName(), type, checkHand);
+        Crate crate = getCrate();
+        Key key = getKey();
+        Player player = getPlayer();
 
-        if (!keyCheck) {
+        // Crate event failed so we return.
+        //boolean keyCheck = this.userManager.takeKeys(1, player.getUniqueId(), crate.getName(), key.getName(), true, checkHand);
+
+        if (!true) {
+            // Send the message about failing to take the key.
+            //MiscUtils.failedToTakeKey(player, crate.getName(), key.getName());
+
             // Remove from opening list.
-            this.crateManager.removePlayerFromOpeningList(getPlayer());
+            //this.crateManager.removePlayerFromOpeningList(player);
 
             // Remove closer/picker
-            this.crateManager.removeCloser(getPlayer());
-            this.crateManager.removePicker(getPlayer());
+            //this.crateManager.removeCloser(player);
+            //this.crateManager.removePicker(player);
 
             return;
         }
 
-        this.crateManager.addPicker(getPlayer(), false);
-        this.crateManager.addCloser(getPlayer(), false);
+        //this.crateManager.addPicker(player, false);
+        //this.crateManager.addCloser(player, false);
 
         addCrateTask(new BukkitRunnable() {
             int full = 0;
@@ -62,13 +67,15 @@ public class WarCrate extends CrateBuilder {
             public void run() {
                 if (this.full < 25) {
                     setRandomPrizes();
+
                     playSound("cycle-sound", SoundCategory.PLAYERS, "BLOCK_LAVA_POP");
                 }
 
                 this.open++;
 
                 if (this.open >= 3) {
-                    getPlayer().openInventory(getInventory());
+                    player.openInventory(getInventory());
+
                     this.open = 0;
                 }
 
@@ -76,23 +83,28 @@ public class WarCrate extends CrateBuilder {
 
                 if (this.full == 26) {
                     playSound("stop-sound", SoundCategory.PLAYERS, "BLOCK_LAVA_POP");
+
                     setRandomGlass();
-                    crateManager.addPicker(getPlayer(), true);
+
+                    //crateManager.addPicker(player, true);
                 }
             }
         }.runTaskTimer(this.plugin, 1, 3));
     }
 
     private void setRandomPrizes() {
-        if (!this.crateManager.isInOpeningList(getPlayer()) && !(getInventory().getHolder(false) instanceof CratePrizeMenu)) return;
+        Player player = getPlayer();
+        Crate crate = getCrate();
+
+        //if (!this.crateManager.isInOpeningList(player) && !(getInventory().getHolder(false) instanceof CratePrizeMenu)) return;
 
         for (int index = 0; index < 9; index++) {
-            setItem(index, getCrate().pickPrize(getPlayer()).getDisplayItem(getPlayer()));
+            setItem(index, crate.pickPrize(player).getDisplayItem(player));
         }
     }
 
     private void setRandomGlass() {
-        if (!this.crateManager.isInOpeningList(getPlayer()) && !(getInventory().getHolder(false) instanceof CratePrizeMenu)) return;
+        //if (!this.crateManager.isInOpeningList(getPlayer()) && !(getInventory().getHolder(false) instanceof CratePrizeMenu)) return;
 
         if (this.colorCodes.isEmpty()) getColorCode();
 

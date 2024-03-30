@@ -1,29 +1,19 @@
 package com.badbones69.crazycrates.support.placeholders;
 
-import com.badbones69.crazycrates.tasks.crates.CrateManager;
+import com.badbones69.crazycrates.CrazyCratesPaper;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang3.StringUtils;
-import com.badbones69.crazycrates.CrazyCratesPaper;
-import com.badbones69.crazycrates.api.objects.Crate;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import com.badbones69.crazycrates.tasks.BukkitUserManager;
-import java.text.NumberFormat;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class PlaceholderAPISupport extends PlaceholderExpansion {
 
-    @NotNull
-    private final CrazyCratesPaper plugin = CrazyCratesPaper.get();
-
-    @NotNull
-    private final BukkitUserManager userManager = this.plugin.getUserManager();
-
-    @NotNull
-    private final CrateManager crateManager = this.plugin.getCrateManager();
+    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String identifier) {
@@ -33,7 +23,7 @@ public class PlaceholderAPISupport extends PlaceholderExpansion {
         Player human = (Player) player;
 
         // This is if the person opening the gui is to be used.
-        for (Crate crate : this.crateManager.getUsableCrates()) {
+        /*for (Crate crate : this.crateManager.getUsableCrates()) {
             if (identifier.equalsIgnoreCase(crate.getName())) {
                 return NumberFormat.getNumberInstance().format(this.userManager.getVirtualKeys(human.getUniqueId(), crate.getName()));
             }
@@ -53,7 +43,7 @@ public class PlaceholderAPISupport extends PlaceholderExpansion {
             if (identifier.equalsIgnoreCase("crates_opened")) {
                 return NumberFormat.getNumberInstance().format(this.userManager.getTotalCratesOpened(human.getUniqueId()));
             }
-        }
+        }*/
 
         // Gets the {player_name} or whatever
         int index = identifier.lastIndexOf("_");
@@ -78,11 +68,11 @@ public class PlaceholderAPISupport extends PlaceholderExpansion {
     }
 
     private String getKeys(UUID uuid, String identifier, String crateName, String value) {
-        if (this.plugin.getCrateManager().getCrateFromName(crateName) == null && identifier.endsWith("opened")) { // %crazycrates_<player>_opened%
-            return NumberFormat.getNumberInstance().format(this.userManager.getTotalCratesOpened(uuid));
-        }
+        //if (this.plugin.getCrateManager().getCrateFromName(crateName) == null && identifier.endsWith("opened")) { // %crazycrates_<player>_opened%
+        //    return NumberFormat.getNumberInstance().format(this.userManager.getTotalCratesOpened(uuid));
+        //}
 
-        Crate crate = this.plugin.getCrateManager().getCrateFromName(crateName);
+        /*Crate crate = this.plugin.getCrateManager().getCrateFromName(crateName);
 
         if (crate == null) {
             this.plugin.getLogger().warning("Crate: " + crateName + " is not a valid crate name.");
@@ -105,7 +95,7 @@ public class PlaceholderAPISupport extends PlaceholderExpansion {
 
         if (result.endsWith("opened")) { // %crazycrates_<player>_<crate>_opened%
             return NumberFormat.getNumberInstance().format(this.userManager.getCrateOpened(uuid, crate.getName()));
-        }
+        }*/
 
         return "N/A";
     }

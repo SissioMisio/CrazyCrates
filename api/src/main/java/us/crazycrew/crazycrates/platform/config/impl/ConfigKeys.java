@@ -4,8 +4,10 @@ import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
+
 import java.util.Collections;
 import java.util.List;
+
 import static ch.jalu.configme.properties.PropertyInitializer.newListProperty;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
@@ -49,8 +51,6 @@ public class ConfigKeys implements SettingsHolder {
         conf.setComment("crate.preview", "The preview settings.");
         conf.setComment("crate.keys", "Settings related to how keys function.");
 
-        conf.setComment("crate.unsupported-settings", "Settings that are not supported and can be removed at anytime.");
-
         conf.setComment("crate.keys.inventory-settings", "Settings related to a player's inventory is not empty.");
 
         conf.setComment("crate.quad-crate", "Settings related to QuadCrate");
@@ -72,10 +72,10 @@ public class ConfigKeys implements SettingsHolder {
     public static final Property<Boolean> toggle_metrics = newProperty("root.toggle_metrics", true);
 
     @Comment("The prefix used in commands")
-    public static final Property<String> command_prefix = newProperty("root.command_prefix", "&8[&bCrazyCrates&8]: ");
+    public static final Property<String> command_prefix = newProperty("root.command_prefix", "<dark_gray>[<blue>CrazyCrates<dark_gray>]: ");
 
     @Comment("The prefix used in console")
-    public static final Property<String> console_prefix = newProperty("root.console_prefix", "&8[&bCrazyCrates&8] ");
+    public static final Property<String> console_prefix = newProperty("root.console_prefix", "<dark_gray>[<blue>CrazyCrates<dark_gray>] ");
 
     @Comment("If /crates should open the main menu. Warning: This will remove the menu button from crate previews.")
     public static final Property<Boolean> enable_crate_menu = newProperty("gui.toggle", true);
@@ -83,23 +83,14 @@ public class ConfigKeys implements SettingsHolder {
     @Comment("Whether to show the display item when opening QuickCrate")
     public static final Property<Boolean> show_quickcrate_item = newProperty("crate.quickcrate-display-item", true);
 
-    //@Comment("Logs all crate actions to a .txt file if enabled. It is recommended to delete the file occasionally.")
-    //public static final Property<Boolean> log_to_file = newProperty("crate.log-file", false);
+    @Comment("Logs all crate actions to a .txt file if enabled. It is recommended to delete the file occasionally.")
+    public static final Property<Boolean> log_to_file = newProperty("crate.log-file", false);
 
-    @Comment({
-            "This option is unsupported and not recommended for use.",
-            "It is not very performant and is recommended to keep false",
-            "The option only here for niche use cases for the time being",
-            "If at some point it ever gets more difficult to maintain this",
-            "The option and code related will be completely removed and not added back."
-    })
-    public static final Property<Boolean> use_old_key_checks = newProperty("crate.unsupported-settings.old-key-checks", false);
-
-    //@Comment("Logs all crate actions to console if enabled.")
-    //public static final Property<Boolean> log_to_console = newProperty("crate.log-console", false);
+    @Comment("Logs all crate actions to console if enabled.")
+    public static final Property<Boolean> log_to_console = newProperty("crate.log-console", false);
 
     @Comment("The name of the gui.")
-    public static final Property<String> inventory_name = newProperty("gui.inventory.name", "&b&lCrazy &4&lCrates");
+    public static final Property<String> inventory_name = newProperty("gui.inventory.name", "<bold><light_blue>Crazy <dark_red>Crates</bold>");
 
     @Comment("The size of the gui. Valid sizes are 9,18,27,36,45")
     public static final Property<Integer> inventory_size = newProperty("gui.inventory.size", 45);
@@ -139,7 +130,7 @@ public class ConfigKeys implements SettingsHolder {
     public static final Property<Boolean> need_key_sound_toggle = newProperty("crate.keys.key-sound.toggle", true);
 
     @Comment("The sound to play.")
-    public static final Property<String> need_key_sound = newProperty("crate.keys.key-sound.name", "ENTITY_VILLAGER_NO");
+    public static final Property<String> need_key_sound = newProperty("crate.keys.key-sound.name", "entity_villager_no");
 
     @Comment("How long should the quad crate be active?")
     public static final Property<Integer> quad_crate_timer = newProperty("crate.quad-crate.timer", 300);
@@ -150,7 +141,7 @@ public class ConfigKeys implements SettingsHolder {
     ));
 
     @Comment("The item the button should be.")
-    public static final Property<String> menu_button_item = newProperty("gui.inventory.buttons.menu.item", "COMPASS");
+    public static final Property<String> menu_button_item = newProperty("gui.inventory.buttons.menu.item", "compass");
 
     @Comment({
             "This will disable our current functionality of our main menu button in crate previews.",
@@ -164,7 +155,7 @@ public class ConfigKeys implements SettingsHolder {
     public static final Property<List<String>> menu_button_command_list = newListProperty("gui.inventory.buttons.menu.override.list", List.of("see {player}"));
 
     @Comment("The name of the item.")
-    public static final Property<String> menu_button_name = newProperty("gui.inventory.buttons.menu.name", "&7&l>> &c&lMenu &7&l<<");
+    public static final Property<String> menu_button_name = newProperty("gui.inventory.buttons.menu.name", "<bold><light_gray>>> <red>Menu <gray><<</bold>");
 
     @Comment("The lore of the item.")
     public static final Property<List<String>> menu_button_lore = newListProperty("gui.inventory.buttons.menu.lore", List.of(
@@ -172,32 +163,32 @@ public class ConfigKeys implements SettingsHolder {
     ));
 
     @Comment("The item the button should be.")
-    public static final Property<String> next_button_item = newProperty("gui.inventory.buttons.next.item", "FEATHER");
+    public static final Property<String> next_button_item = newProperty("gui.inventory.buttons.next.item", "feather");
 
     @Comment("The name of the item.")
-    public static final Property<String> next_button_name = newProperty("gui.inventory.buttons.next.name", "&6&lNext >>");
+    public static final Property<String> next_button_name = newProperty("gui.inventory.buttons.next.name", "<bold><gold>Next >></bold>");
 
     @Comment("The lore of the item.")
     public static final Property<List<String>> next_button_lore = newListProperty("gui.inventory.buttons.next.lore", List.of(
-            "&7&lPage: &b{page}"
+            "<bold><gray>Page:</bold> <light_blue>{page}"
     ));
 
     @Comment("The item the button should be.")
-    public static final Property<String> back_button_item = newProperty("gui.inventory.buttons.back.item", "FEATHER");
+    public static final Property<String> back_button_item = newProperty("gui.inventory.buttons.back.item", "feather");
 
     @Comment("The name of the item.")
-    public static final Property<String> back_button_name = newProperty("gui.inventory.buttons.back.name", "&6&l<< Back");
+    public static final Property<String> back_button_name = newProperty("gui.inventory.buttons.back.name", "<bold><gold><< Back</bold>");
 
     @Comment("The lore of the item.")
     public static final Property<List<String>> back_button_lore = newListProperty("gui.inventory.buttons.back.lore", List.of(
-            "&7&lPage: &b{page}"
+            "<bold><gray>Page:</bold> <light_blue>{page}"
     ));
 
     @Comment("Should the menu should be filled with one type of item?")
     public static final Property<Boolean> filler_toggle = newProperty("gui.inventory.buttons.filler.toggle", false);
 
     @Comment("The item to fill the menu with.")
-    public static final Property<String> filler_item = newProperty("gui.inventory.buttons.filler.item", "BLACK_STAINED_GLASS_PANE");
+    public static final Property<String> filler_item = newProperty("gui.inventory.buttons.filler.item", "black_stained_glass_pane");
 
     @Comment("The name of the item.")
     public static final Property<String> filler_name = newProperty("gui.inventory.buttons.filler.name", " ");
@@ -210,50 +201,50 @@ public class ConfigKeys implements SettingsHolder {
 
     @Comment("The items to set to the gui.")
     public static final Property<List<String>> gui_customizer = newListProperty("gui.inventory.buttons.customizer.items", List.of(
-            "slot:1, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:2, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:3, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:4, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:5, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:6, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:7, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:8, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:9, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:37, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:38, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:39, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:40, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:41, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:42, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:43, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:44, item:RED_STAINED_GLASS_PANE, name: ",
-            "slot:45, item:RED_STAINED_GLASS_PANE, name: ",
+            "slot:1, item:red_stained_glass_pane, name: ",
+            "slot:2, item:red_stained_glass_pane, name: ",
+            "slot:3, item:red_stained_glass_pane, name: ",
+            "slot:4, item:red_stained_glass_pane, name: ",
+            "slot:5, item:red_stained_glass_pane, name: ",
+            "slot:6, item:red_stained_glass_pane, name: ",
+            "slot:7, item:red_stained_glass_pane, name: ",
+            "slot:8, item:red_stained_glass_pane, name: ",
+            "slot:9, item:red_stained_glass_pane, name: ",
+            "slot:37, item:red_stained_glass_pane, name: ",
+            "slot:38, item:red_stained_glass_pane, name: ",
+            "slot:39, item:red_stained_glass_pane, name: ",
+            "slot:40, item:red_stained_glass_pane, name: ",
+            "slot:41, item:red_stained_glass_pane, name: ",
+            "slot:42, item:red_stained_glass_pane, name: ",
+            "slot:43, item:red_stained_glass_pane, name: ",
+            "slot:44, item:red_stained_glass_pane, name: ",
+            "slot:45, item:red_stained_glass_pane, name: ",
 
-            "slot:10, item:BLUE_STAINED_GLASS_PANE, name: ",
-            "slot:19, item:BLUE_STAINED_GLASS_PANE, name: ",
-            "slot:28, item:BLUE_STAINED_GLASS_PANE, name: ",
-            "slot:18, item:BLUE_STAINED_GLASS_PANE, name: ",
-            "slot:27, item:BLUE_STAINED_GLASS_PANE, name: ",
-            "slot:36, item:BLUE_STAINED_GLASS_PANE, name: ",
+            "slot:10, item:blue_stained_glass_pane, name: ",
+            "slot:19, item:blue_stained_glass_pane, name: ",
+            "slot:28, item:blue_stained_glass_pane, name: ",
+            "slot:18, item:blue_stained_glass_pane, name: ",
+            "slot:27, item:blue_stained_glass_pane, name: ",
+            "slot:36, item:blue_stained_glass_pane, name: ",
 
-            "slot:11, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:13, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:15, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:25, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:17, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:20, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:21, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:22, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:23, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:24, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:25, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:26, item:CYAN_STAINED_GLASS_PANE, name: ",
+            "slot:11, item:cyan_stained_glass_pane, name: ",
+            "slot:13, item:cyan_stained_glass_pane, name: ",
+            "slot:15, item:cyan_stained_glass_pane, name: ",
+            "slot:25, item:cyan_stained_glass_pane, name: ",
+            "slot:17, item:cyan_stained_glass_pane, name: ",
+            "slot:20, item:cyan_stained_glass_pane, name: ",
+            "slot:21, item:cyan_stained_glass_pane, name: ",
+            "slot:22, item:cyan_stained_glass_pane, name: ",
+            "slot:23, item:cyan_stained_glass_pane, name: ",
+            "slot:24, item:cyan_stained_glass_pane, name: ",
+            "slot:25, item:cyan_stained_glass_pane, name: ",
+            "slot:26, item:cyan_stained_glass_pane, name: ",
 
-            "slot:29, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:31, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:32, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:33, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:34, item:CYAN_STAINED_GLASS_PANE, name: ",
-            "slot:35, item:CYAN_STAINED_GLASS_PANE, name: "
+            "slot:29, item:cyan_stained_glass_pane, name: ",
+            "slot:31, item:cyan_stained_glass_pane, name: ",
+            "slot:32, item:cyan_stained_glass_pane, name: ",
+            "slot:33, item:cyan_stained_glass_pane, name: ",
+            "slot:34, item:cyan_stained_glass_pane, name: ",
+            "slot:35, item:cyan_stained_glass_pane, name: "
     ));
 }

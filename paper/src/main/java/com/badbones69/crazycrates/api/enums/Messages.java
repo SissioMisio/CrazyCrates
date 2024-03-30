@@ -2,7 +2,11 @@ package com.badbones69.crazycrates.api.enums;
 
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.properties.Property;
-import com.badbones69.crazycrates.api.utils.MiscUtils;
+import com.badbones69.crazycrates.platform.utils.MiscUtils;
+import com.badbones69.crazycrates.platform.utils.MsgUtils;
+import com.ryderbelserion.cluster.utils.AdvUtils;
+import com.ryderbelserion.cluster.utils.StringUtils;
+import net.kyori.adventure.text.Component;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import us.crazycrew.crazycrates.platform.config.impl.messages.CommandKeys;
 import us.crazycrew.crazycrates.platform.config.impl.messages.CrateKeys;
@@ -13,8 +17,6 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
-import us.crazycrew.crazycrates.utils.StringUtils;
-import com.badbones69.crazycrates.api.utils.MsgUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,7 @@ public enum Messages {
     needs_more_room(CrateKeys.needs_more_room),
     out_of_time(CrateKeys.out_of_time),
     not_a_crate(CrateKeys.not_a_crate),
+    not_a_key(CrateKeys.not_a_key),
     not_a_number(CrateKeys.not_a_number),
     preview_disabled(CrateKeys.preview_disabled),
     required_keys(CrateKeys.required_keys),
@@ -111,8 +114,7 @@ public enum Messages {
         this.isList = isList;
     }
 
-    @NotNull
-    private final SettingsManager configuration = ConfigManager.getMessages();
+    private final @NotNull SettingsManager configuration = ConfigManager.getMessages();
 
     private boolean isList() {
         return this.isList;
@@ -126,30 +128,30 @@ public enum Messages {
         return this.configuration.getProperty(property);
     }
 
-    public String getMessage(Map<String, String> placeholders) {
-        return getMessage(placeholders, null);
-    }
-
-    public String getMessage() {
+    public Component getMessage() {
         return getMessage(new HashMap<>(), null);
     }
 
-    public String getMessage(Player player) {
+    public Component getMessage(Player player) {
         return getMessage(new HashMap<>(), player);
     }
 
-    public String getMessage(String placeholder, String replacement, Player player) {
+    public Component getMessage(Map<String, String> placeholders) {
+        return getMessage(placeholders, null);
+    }
+
+    public Component getMessage(String placeholder, String replacement, Player player) {
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put(placeholder, replacement);
 
         return getMessage(placeholders, player);
     }
 
-    public String getMessage(String placeholder, String replacement) {
+    public Component getMessage(String placeholder, String replacement) {
         return getMessage(placeholder, replacement, null);
     }
 
-    public String getMessage(Map<String, String> placeholders, Player player) {
+    public Component getMessage(Map<String, String> placeholders, Player player) {
         // Get the string first.
         String message;
 
@@ -167,18 +169,18 @@ public enum Messages {
 
         this.message = message;
 
-        return asString(player);
+        return asComponent(player);
     }
 
-    private String asString(Player player) {
+    private Component asComponent(Player player) {
         String prefix = ConfigManager.getConfig().getProperty(ConfigKeys.command_prefix);
 
         String message = this.message.replaceAll("\\{prefix}", prefix);
 
         if (MiscUtils.isPapiActive() && player != null) {
-            return PlaceholderAPI.setPlaceholders(player, MsgUtils.color(message));
+            return AdvUtils.parse(PlaceholderAPI.setPlaceholders(player, message));
         }
 
-        return MsgUtils.color(message);
+        return AdvUtils.parse(message);
     }
 }

@@ -6,10 +6,12 @@ jars
 common/build
 paper/build
 api/build
+alpha/build
 
 common/.gradle
 api/.gradle
 paper/.gradle
+alpha/.gradle
 
 paper/run
 

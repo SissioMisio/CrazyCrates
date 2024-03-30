@@ -25,6 +25,14 @@ public enum KeyType {
         this.name = name;
     }
 
+    public static KeyType getType(boolean isVirtual) {
+        if (isVirtual) {
+            return KeyType.virtual_key;
+        }
+
+        return KeyType.physical_key;
+    }
+
     /**
      * Get the key type by name.
      *

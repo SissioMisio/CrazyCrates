@@ -1,13 +1,12 @@
 package com.badbones69.crazycrates.support.holograms.types;
 
 import com.badbones69.crazycrates.api.objects.Crate;
+import com.badbones69.crazycrates.platform.utils.MsgUtils;
 import us.crazycrew.crazycrates.api.crates.CrateHologram;
 import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
 import org.bukkit.block.Block;
 import com.badbones69.crazycrates.support.holograms.HologramManager;
-import com.badbones69.crazycrates.api.utils.MsgUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,7 +17,7 @@ public class DecentHologramsSupport extends HologramManager {
 
     @Override
     public void createHologram(Block block, Crate crate) {
-        CrateHologram crateHologram = crate.getHologram();
+        CrateHologram crateHologram = crate.getCrateHologram();
 
         if (!crateHologram.isEnabled()) return;
 
