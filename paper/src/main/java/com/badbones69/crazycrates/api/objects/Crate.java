@@ -522,7 +522,7 @@ public class Crate {
 
         if (this.broadcastMessage.isEmpty() || this.broadcastMessage.isBlank()) return;
 
-        this.plugin.getServer().broadcastMessage(this.broadcastMessage.replaceAll("%prefix%", MsgUtils.getPrefix()).replaceAll("%player%", player.getName()));
+        //this.plugin.getServer().broadcastMessage(this.broadcastMessage.replaceAll("%prefix%", MsgUtils.getPrefix()).replaceAll("%player%", player.getName()));
     }
 
     /**
@@ -534,15 +534,15 @@ public class Crate {
         if (this.commands.isEmpty()) return;
 
         this.commands.forEach(command -> {
-            String builder;
+            //String builder;
 
             if (MiscUtils.isPapiActive()) {
-                builder = PlaceholderAPI.setPlaceholders(player, command.replaceAll("%prefix%", MsgUtils.getPrefix()).replaceAll("%player%", player.getName()));
+                //builder = PlaceholderAPI.setPlaceholders(player, command.replaceAll("%prefix%", MsgUtils.getPrefix()).replaceAll("%player%", player.getName()));
             } else {
-                builder = command.replaceAll("%prefix%", MsgUtils.getPrefix()).replaceAll("%player%", player.getName());
+                //builder = command.replaceAll("%prefix%", MsgUtils.getPrefix()).replaceAll("%player%", player.getName());
             }
 
-            this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), builder);
+            //this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), builder);
         });
     }
 
@@ -834,6 +834,7 @@ public class Crate {
         for (Prize key : this.prizes) {
             if (key.getPrizeName().equalsIgnoreCase(prizeName)) {
                 prize = key;
+
                 break;
             }
         }
@@ -854,6 +855,7 @@ public class Crate {
 
                 if (number >= 1.0 && number <= chance) {
                     tier = key;
+
                     break;
                 }
             }
@@ -869,6 +871,7 @@ public class Crate {
             if (!key.getTierName().equalsIgnoreCase(tierName)) continue;
 
             tier = key;
+
             break;
         }
 
