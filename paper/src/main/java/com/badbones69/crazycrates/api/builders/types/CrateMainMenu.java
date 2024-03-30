@@ -192,7 +192,7 @@ public class CrateMainMenu extends InventoryBuilder {
             switch (event.getClick()) {
                 case RIGHT, SHIFT_RIGHT -> {
                     if (crate.isPreviewToggle()) {
-                        crate.playSound(player, "click-sound", "UI_BUTTON_CLICK", SoundCategory.PLAYERS);
+                        crate.playSound(player, "click-sound", "ui_button_click", SoundCategory.PLAYERS);
 
                         inventory.close();
 
@@ -226,7 +226,7 @@ public class CrateMainMenu extends InventoryBuilder {
 
                     //if (key == null) return;
 
-                    crate.playSound(player, "click-sound", "UI_BUTTON_CLICK", SoundCategory.PLAYERS);
+                    crate.playSound(player, "click-sound", "ui_button_click", SoundCategory.PLAYERS);
 
                     KeyType keyType = KeyType.virtual_key;
                     boolean hasKey = false;
