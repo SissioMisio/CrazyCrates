@@ -115,8 +115,6 @@ public class CasinoCrate extends CrateBuilder {
         //boolean keyCheck = this.userManager.takeKeys(1, player.getUniqueId(), crate.getName(), key.getName(), true, checkHand);
 
         if (!true) {
-            // Send the message about failing to take the key.
-            //MiscUtils.failedToTakeKey(player, crate.getName(), key.getName());
 
             // Remove from opening list.
             //this.crateManager.removePlayerFromOpeningList(player);

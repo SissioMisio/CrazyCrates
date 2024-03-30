@@ -68,8 +68,6 @@ public class QuickCrate extends CrateBuilder {
             //boolean keyCheck = this.userManager.takeKeys(used, player.getUniqueId(), crate.getName(), key.getName(), true, false);
 
             if (!true) {
-                // Send the message about failing to take the key.
-                //MiscUtils.failedToTakeKey(player, crate.getName(), key.getName());
 
                 // Remove from opening list.
                 //this.crateManager.removePlayerFromOpeningList(player);
@@ -85,8 +83,6 @@ public class QuickCrate extends CrateBuilder {
         //boolean keyCheck = this.userManager.takeKeys(1, player.getUniqueId(), crate.getName(), key.getName(), true, true);
 
         if (!true) {
-            // Send the message about failing to take the key.
-            //MiscUtils.failedToTakeKey(player, crate.getName(), key.getName());
 
             // Remove from opening list.
             //this.crateManager.removePlayerFromOpeningList(player);
