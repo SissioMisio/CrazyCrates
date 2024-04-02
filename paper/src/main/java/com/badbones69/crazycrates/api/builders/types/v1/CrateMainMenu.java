@@ -1,7 +1,7 @@
 package com.badbones69.crazycrates.api.builders.types.v1;
 
 import ch.jalu.configme.SettingsManager;
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.api.objects.Crate;
@@ -158,7 +158,7 @@ public class CrateMainMenu extends InventoryBuilder {
 
     public static class CrateMenuListener implements Listener {
 
-        private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+        private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
         private final @NotNull KeyManager keyManager = null;
 

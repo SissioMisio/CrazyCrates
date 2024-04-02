@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.listeners.crates;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,7 +14,7 @@ import com.badbones69.crazycrates.api.builders.types.v1.CratePrizeMenu;
 
 public class WarCrateListener implements Listener {
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final @NotNull CrateManager crateManager = null;
 

@@ -24,7 +24,7 @@ public class CrateManager {
     private final Set<String> brokenCrates = new HashSet<>();
     private final Set<Crate> crates = new HashSet<>();
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final @NotNull Server instance = this.plugin.getInstance();
 

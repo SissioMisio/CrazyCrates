@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.listeners.crates;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.api.events.CrateOpenEvent;
 import com.badbones69.crazycrates.api.objects.Crate;
@@ -15,7 +15,7 @@ import us.crazycrew.crazycrates.api.enums.types.CrateType;
 
 public class CrateOpenListener implements Listener {
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final @NotNull UserManager userManager = null;
 

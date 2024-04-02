@@ -1,19 +1,13 @@
 package com.badbones69.crazycrates.tasks.crates.types;
 
 import com.badbones69.crazycrates.api.objects.Crate;
-import com.badbones69.crazycrates.api.objects.other.CrateLocation;
 import com.badbones69.crazycrates.platform.crates.objects.Key;
-import com.badbones69.crazycrates.support.StructureHandler;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
-import com.badbones69.crazycrates.tasks.crates.other.quadcrates.QuadCrateManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazycrates.api.crates.quadcrates.CrateSchematic;
 import com.badbones69.crazycrates.api.builders.CrateBuilder;
 import us.crazycrew.crazycrates.api.enums.types.KeyType;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 public class QuadCrate extends CrateBuilder {
 

@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.support;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -24,7 +24,7 @@ import java.util.UUID;
  */
 public class SkullSupport {
 
-    private static final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private static final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     /**
      * Creates a player skull with a UUID. 1.13 only.

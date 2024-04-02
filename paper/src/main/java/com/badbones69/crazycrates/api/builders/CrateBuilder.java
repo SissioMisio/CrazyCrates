@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.api.builders;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.builders.types.v1.CratePrizeMenu;
 import com.badbones69.crazycrates.api.events.CrateOpenEvent;
 import com.badbones69.crazycrates.api.objects.Crate;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public abstract class CrateBuilder extends BukkitRunnable {
 
-    protected final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    protected final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final InventoryBuilder builder;
     private final Inventory inventory;

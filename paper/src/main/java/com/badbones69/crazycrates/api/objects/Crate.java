@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.api.objects;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
 import com.badbones69.crazycrates.api.builders.types.v1.CratePreviewMenu;
 import com.badbones69.crazycrates.api.builders.types.v1.CrateTierMenu;
@@ -10,7 +10,6 @@ import com.badbones69.crazycrates.api.events.PlayerPrizeEvent;
 import com.badbones69.crazycrates.platform.utils.MiscUtils;
 import com.badbones69.crazycrates.platform.utils.MsgUtils;
 import com.badbones69.crazycrates.tasks.InventoryManager;
-import com.badbones69.crazycrates.tasks.crates.effects.SoundEffect;
 import com.badbones69.crazycrates.tasks.crates.other.CasinoCrateManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang.WordUtils;
@@ -40,7 +39,7 @@ import static java.util.regex.Matcher.quoteReplacement;
 
 public class Crate {
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final @NotNull InventoryManager inventoryManager = null;
 

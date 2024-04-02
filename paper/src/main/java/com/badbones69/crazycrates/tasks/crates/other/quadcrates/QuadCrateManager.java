@@ -29,7 +29,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class QuadCrateManager {
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
     private final @NotNull CrateManager crateManager = null;
 
     private static final List<QuadCrateManager> crateSessions = new ArrayList<>();

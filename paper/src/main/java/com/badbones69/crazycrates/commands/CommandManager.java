@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.commands;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.commands.crates.types.admin.CommandAdmin;
 import com.badbones69.crazycrates.commands.crates.types.admin.keys.CommandGive;
 import com.badbones69.crazycrates.commands.relations.ArgumentRelations;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CommandManager {
 
-    private final static @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final static @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final static @NotNull BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(plugin);
 

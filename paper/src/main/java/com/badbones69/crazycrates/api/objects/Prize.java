@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.api.objects;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
 import com.badbones69.crazycrates.api.enums.PersistentKeys;
 import com.ryderbelserion.vital.utils.ItemUtils;
@@ -142,7 +142,7 @@ public class Prize {
                 }
             } else {
                 if (!crateTiers.isEmpty()) {
-                    @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+                    @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
                     List.of(
                             "The tiers are not defined in prize: " + this.prizeName,
                             "but the " + name + " file the prize is in has tiers defined.",

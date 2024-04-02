@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.listeners.crates;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.api.enums.PersistentKeys;
@@ -39,7 +39,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class QuadCrateListener implements Listener {
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final SessionManager sessionManager = new SessionManager();
 

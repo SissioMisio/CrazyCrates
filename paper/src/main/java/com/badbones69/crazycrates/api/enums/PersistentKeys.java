@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.api.enums;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,7 +22,7 @@ public enum PersistentKeys {
     crate_name("crate_name", PersistentDataType.STRING),
     crate_key("crate_key", PersistentDataType.STRING);
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final String key;
     private final PersistentDataType type;

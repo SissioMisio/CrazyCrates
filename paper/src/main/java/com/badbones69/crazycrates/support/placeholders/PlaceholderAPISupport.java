@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.support.placeholders;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang3.StringUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class PlaceholderAPISupport extends PlaceholderExpansion {
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String identifier) {

@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.api.enums;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.ryderbelserion.vital.files.FileManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,7 +17,7 @@ public enum Files {
         this.fileName = fileName;
     }
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final @NotNull FileManager fileManager = this.plugin.getFileManager();
 

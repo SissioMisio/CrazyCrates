@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.listeners;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.builders.types.CrateAdminMenu;
 import com.badbones69.crazycrates.api.builders.types.v1.CrateMainMenu;
 import com.badbones69.crazycrates.api.builders.types.v1.CratePreviewMenu;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MiscListener implements Listener {
 
-    private final @NotNull CrazyCratesPaper plugin = JavaPlugin.getPlugin(CrazyCratesPaper.class);
+    private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
     private final @NotNull InventoryManager inventoryManager = null;
 
