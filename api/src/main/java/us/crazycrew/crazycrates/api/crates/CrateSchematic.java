@@ -1,4 +1,4 @@
-package us.crazycrew.crazycrates.api.crates.quadcrates;
+package us.crazycrew.crazycrates.api.crates;
 
 import java.io.File;
 
