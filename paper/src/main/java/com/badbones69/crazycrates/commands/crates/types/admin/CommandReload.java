@@ -3,7 +3,6 @@ package com.badbones69.crazycrates.commands.crates.types.admin;
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.commands.crates.BaseCommand;
 import com.badbones69.crazycrates.platform.utils.MiscUtils;
-import com.badbones69.crazycrates.support.metrics.MetricsManager;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
 import com.ryderbelserion.vital.files.FileManager;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -18,7 +17,6 @@ public class CommandReload extends BaseCommand {
 
     private final @NotNull CrateManager crateManager = this.plugin.getCrateManager();
     private final @NotNull FileManager fileManager = this.plugin.getFileManager();
-    private final @NotNull MetricsManager metrics = this.plugin.getMetrics();
 
     @Command("reload")
     @Permission(value = "crazycrates.reload", def = PermissionDefault.OP)
@@ -27,14 +25,6 @@ public class CommandReload extends BaseCommand {
 
         MiscUtils.cleanFiles();
         MiscUtils.loadFiles();
-
-        boolean isEnabled = MiscUtils.toggleMetrics();
-
-        if (!isEnabled) {
-            this.metrics.stop();
-        } else {
-            this.metrics.start();
-        }
 
         // Close previews
         if (this.config.getProperty(ConfigKeys.take_out_of_preview)) {
