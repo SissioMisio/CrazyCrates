@@ -6,8 +6,8 @@ import com.badbones69.crazycrates.platform.crates.KeyManager;
 import com.badbones69.crazycrates.platform.crates.UserManager;
 import com.badbones69.crazycrates.platform.crates.objects.Key;
 import com.badbones69.crazycrates.platform.utils.ItemUtils;
-import com.ryderbelserion.cluster.items.ParentBuilder;
-import com.ryderbelserion.cluster.utils.AdvUtils;
+import com.ryderbelserion.vital.items.ParentBuilder;
+import com.ryderbelserion.vital.utils.MiscUtils;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.Material;
@@ -34,7 +34,7 @@ public class CrateAdminMenu extends InventoryBuilder {
     public InventoryBuilder build() {
         Gui gui = getGui();
 
-        ItemStack button = ParentBuilder.of(Material.CHEST)
+        ItemStack button = new ParentBuilder().setMaterial(Material.CHEST)
                 .setDisplayName("<#e91e63:#fe909a>What is this menu?")
                 .addDisplayLore("")
                 .addDisplayLore("<red>A cheat sheet menu of all your available keys.")
@@ -78,7 +78,7 @@ public class CrateAdminMenu extends InventoryBuilder {
                         placeholders.put("{keytype}", KeyType.physical_key.getFriendlyName());
                         placeholders.put("{amount}", "1");
 
-                        player.sendActionBar(AdvUtils.parse(Messages.obtaining_keys.getMessage(player, placeholders)));
+                        player.sendActionBar(MiscUtils.parse(Messages.obtaining_keys.getMessage(player, placeholders)));
                     }
 
                     case RIGHT -> {
@@ -89,7 +89,7 @@ public class CrateAdminMenu extends InventoryBuilder {
                         placeholders.put("{keytype}", KeyType.physical_key.getFriendlyName());
                         placeholders.put("{amount}", "8");
 
-                        player.sendActionBar(AdvUtils.parse(Messages.obtaining_keys.getMessage(player, placeholders)));
+                        player.sendActionBar(MiscUtils.parse(Messages.obtaining_keys.getMessage(player, placeholders)));
                     }
                 }
             });
