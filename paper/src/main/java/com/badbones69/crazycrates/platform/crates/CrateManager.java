@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.platform.crates;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.platform.utils.MiscUtils;
 import com.google.common.base.Preconditions;
@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.platform.Server;
 import us.crazycrew.crazycrates.platform.crates.CrateConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,14 +42,16 @@ public class CrateManager {
             CrateConfig crateConfig = new CrateConfig(file);
 
             try {
-                //crateConfig.load();
+                crateConfig.load();
 
                 ConfigurationSection section = crateConfig.getCrateSection().getConfigurationSection("PhysicalKey");
 
                 if (section != null) {
                     File keyFile = new File(this.plugin.getDataFolder() + "/" + crateConfig.getName() + ".yml");
 
-                    keyFile.createNewFile();
+                    if (keyFile.createNewFile()) {
+                        if (MiscUtils.isLogging()) this.plugin.getLogger().warning("Created file: " + keyFile.getName());
+                    }
 
                     YamlConfiguration configuration = YamlConfiguration.loadConfiguration(keyFile);
 
@@ -64,14 +67,20 @@ public class CrateManager {
 
                     configuration.save(keyFile);
 
-                    crateConfig.getConfiguration().set("Crate.PhysicalKey", null);
+                    crateConfig.getCrateSection().set("PhysicalKey", null);
 
-                    crateConfig.getConfiguration().set("Crate.keys", new ArrayList<>() {{
+                    crateConfig.getCrateSection().set("keys", new ArrayList<>() {{
                         add(keyFile.getName().replaceAll(".yml", ""));
                     }});
 
-                    crateConfig.getConfiguration().save(keyFile);
+                    crateConfig.save(keyFile);
                 }
+            }  catch (InvalidConfigurationException exception) {
+                this.plugin.getLogger().log(Level.WARNING, file.getName() + " contains invalid YAML structure.", exception);
+
+                this.brokenCrates.add(file.getName());
+
+                continue;
             } catch (IOException exception) {
                 this.plugin.getLogger().log(Level.WARNING, "Could not load crate file: " + file.getName(), exception);
 
