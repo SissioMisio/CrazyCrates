@@ -60,6 +60,10 @@ tasks {
         }
     }
 
+    assemble {
+        dependsOn(reobfJar)
+    }
+
     processResources {
         val properties = hashMapOf(
             "name" to rootProject.name,
