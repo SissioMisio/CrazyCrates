@@ -5,33 +5,37 @@ import us.crazycrew.crazycrates.platform.crates.CrateConfig;
 
 public abstract class AbstractCrateManager {
 
-    private final CrateConfig config;
+    protected final CrateConfig config;
+
+    protected final ConfigurationSection section;
 
     public AbstractCrateManager(CrateConfig config) {
         this.config = config;
+
+        this.section = this.config.getCrateSection();
     }
 
     public ConfigurationSection getTierSection() {
-        return this.config.getCrateSection().getConfigurationSection("Tiers");
+        return this.section.getConfigurationSection("Tiers");
     }
 
     public boolean isTierPreviewEnabled() {
-        return this.config.getCrateSection().getBoolean("tier-preview.toggle", true);
+        return this.section.getBoolean("tier-preview.toggle", true);
     }
 
     public int getTierPreviewRows() {
-        return this.config.getCrateSection().getInt("tier-preview.rows", 5);
+        return this.section.getInt("tier-preview.rows", 5);
     }
 
     public boolean isTierPreviewFillerEnabled() {
-        return this.config.getCrateSection().getBoolean("tier-preview.glass.toggle", true);
+        return this.section.getBoolean("tier-preview.glass.toggle", true);
     }
 
     public String getTierPreviewFillerName() {
-        return this.config.getCrateSection().getString("tier-preview.glass.name", " ");
+        return this.section.getString("tier-preview.glass.name", " ");
     }
 
     public String getTierPreviewFillerItem() {
-        return this.config.getCrateSection().getString("tier-preview.glass.item", "red_stained_glass_pane");
+        return this.section.getString("tier-preview.glass.item", "red_stained_glass_pane");
     }
 }

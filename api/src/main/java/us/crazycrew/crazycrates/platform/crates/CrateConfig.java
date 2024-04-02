@@ -1,39 +1,43 @@
 package us.crazycrew.crazycrates.platform.crates;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
 import java.io.File;
 import java.io.IOException;
 
 public class CrateConfig extends YamlConfiguration {
 
-    private final YamlConfiguration file;
+    private final File file;
     private final String name;
 
+    /**
+     * Creates a config object.
+     *
+     * @param file the file to bind
+     */
     public CrateConfig(File file) {
-        this.file = YamlConfiguration.loadConfiguration(file);
+        this.file = file;
 
         this.name = file.getName().replaceAll(".yml", "");
     }
 
-    @Override
-    public ConfigurationSection getConfigurationSection(String path) {
-        return this.file.getConfigurationSection(path);
+    /**
+     * Loads the crate config file.
+     *
+     * @throws IOException if the file fails to load
+     */
+    public void load() throws IOException, InvalidConfigurationException {
+        load(this.file);
     }
 
     /**
      * @return the name of the file without .yml
      */
-    public String getName() {
+    public @NotNull String getName() {
         return this.name;
-    }
-
-    /**
-     * @return the crate file.
-     */
-    public YamlConfiguration getConfiguration() {
-        return this.file;
     }
 
     /**
