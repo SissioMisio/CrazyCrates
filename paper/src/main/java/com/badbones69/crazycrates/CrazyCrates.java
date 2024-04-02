@@ -1,30 +1,26 @@
 package com.badbones69.crazycrates;
 
 import com.badbones69.crazycrates.commands.CommandManager;
-import com.badbones69.crazycrates.platform.PaperFactory;
-import com.badbones69.crazycrates.platform.PaperServer;
+import us.crazycrew.crazycrates.platform.Server;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
 import com.badbones69.crazycrates.platform.crates.KeyManager;
 import com.badbones69.crazycrates.platform.crates.UserManager;
-import com.badbones69.crazycrates.platform.utils.MiscUtils;
-import com.badbones69.crazycrates.support.metrics.MetricsManager;
 import com.ryderbelserion.vital.files.FileManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
-public class CrazyCratesPaper extends JavaPlugin {
+public class CrazyCrates extends JavaPlugin {
 
-    private FileManager fileManager;
-    private PaperServer instance;
-    private KeyManager keyManager;
     private CrateManager crateManager;
     private UserManager userManager;
-
-    private MetricsManager metrics;
+    private FileManager fileManager;
+    private KeyManager keyManager;
+    private Server instance;
 
     @Override
     public void onLoad() {
-        this.instance = new PaperServer(getDataFolder());
-        new PaperFactory(this);
+        this.instance = new Server(this);
+        this.instance.enable();
 
         this.fileManager = new FileManager();
         this.fileManager.addStaticFile("locations.yml").addStaticFile("data.yml").create();
@@ -41,40 +37,32 @@ public class CrazyCratesPaper extends JavaPlugin {
         this.userManager = new UserManager();
 
         CommandManager.load();
-
-        this.metrics = new MetricsManager();
-
-        if (MiscUtils.toggleMetrics()) {
-            this.metrics.start();
-        }
     }
 
     @Override
     public void onDisable() {
-        super.onDisable();
+        if (this.instance != null) {
+            this.instance.disable();
+        }
     }
 
-    public FileManager getFileManager() {
-        return this.fileManager;
-    }
-
-    public PaperServer getInstance() {
-        return this.instance;
-    }
-
-    public KeyManager getKeyManager() {
-        return this.keyManager;
-    }
-
-    public CrateManager getCrateManager() {
+    public @NotNull CrateManager getCrateManager() {
         return this.crateManager;
     }
 
-    public UserManager getUserManager() {
+    public @NotNull FileManager getFileManager() {
+        return this.fileManager;
+    }
+
+    public @NotNull KeyManager getKeyManager() {
+        return this.keyManager;
+    }
+
+    public @NotNull UserManager getUserManager() {
         return this.userManager;
     }
 
-    public MetricsManager getMetrics() {
-        return this.metrics;
+    public @NotNull Server getInstance() {
+        return this.instance;
     }
 }
