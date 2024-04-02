@@ -1,13 +1,13 @@
 package com.badbones69.crazycrates.tasks.crates.other.quadcrates;
 
-import com.badbones69.crazycrates.CrazyCratesPaper;
-import com.badbones69.crazycrates.api.ChestManager;
-import com.badbones69.crazycrates.api.SpiralManager;
+import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.platform.crates.objects.Key;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
-import org.bukkit.*;
-import org.bukkit.block.Block;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.support.StructureHandler;
@@ -16,21 +16,17 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazycrates.api.crates.quadcrates.CrateParticles;
 import us.crazycrew.crazycrates.api.enums.types.KeyType;
-import us.crazycrew.crazycrates.platform.config.ConfigManager;
-import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class QuadCrateManager {
 
     private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
-    private final @NotNull CrateManager crateManager = null;
+    private final @NotNull CrateManager crateManager = this.plugin.getCrateManager();
 
     private static final List<QuadCrateManager> crateSessions = new ArrayList<>();
 
@@ -76,8 +72,9 @@ public class QuadCrateManager {
     private final Map<Location, BlockState> oldBlocks = new HashMap<>();
 
     // Get the particles that will be used to display above the crates.
+    // Get the particles that will be used to display above the crates.
     private final Color particleColor;
-    private final CrateParticles particle;
+    private final Particle particle;
 
     // Get the structure handler.
     private final StructureHandler handler;
@@ -108,10 +105,8 @@ public class QuadCrateManager {
 
         this.handler = handler;
 
-        List<CrateParticles> particles = Arrays.asList(CrateParticles.values());
-
-        this.particle = particles.get(ThreadLocalRandom.current().nextInt(particles.size()));
-        this.particleColor = getColors().get(ThreadLocalRandom.current().nextInt(getColors().size()));
+        this.particle = Particle.ASH;
+        this.particleColor = Color.AQUA;
 
         crateSessions.add(this.instance);
     }
@@ -351,26 +346,19 @@ public class QuadCrateManager {
     /**
      * Spawn particles at 2 specific locations with a customizable color.
      *
-     * @param quadCrateParticle the particle to spawn.
-     * @param particleColor the color of the particle.
      * @param location1 the first location of the particle.
      * @param location2 the second location of the particle.
      */
-    private void spawnParticles(CrateParticles quadCrateParticle, Color particleColor, Location location1, Location location2) {
-        Particle particle = switch (quadCrateParticle) {
-            case flame -> Particle.FLAME;
-            case villager_happy -> Particle.VILLAGER_HAPPY;
-            case spell_witch -> Particle.SPELL_WITCH;
-            default -> Particle.REDSTONE;
-        };
+    private void spawnParticles(Location location1, Location location2) {
+        if (this.particle == Particle.REDSTONE) {
+            location1.getWorld().spawnParticle(this.particle, location1, 0, new Particle.DustOptions(this.particleColor, 1));
+            location2.getWorld().spawnParticle(this.particle, location2, 0, new Particle.DustOptions(this.particleColor, 1));
 
-        if (particle == Particle.REDSTONE) {
-            location1.getWorld().spawnParticle(particle, location1, 0, new Particle.DustOptions(particleColor, 1));
-            location2.getWorld().spawnParticle(particle, location2, 0, new Particle.DustOptions(particleColor, 1));
-        } else {
-            location1.getWorld().spawnParticle(particle, location1, 0);
-            location2.getWorld().spawnParticle(particle, location2, 0);
+            return;
         }
+
+        location1.getWorld().spawnParticle(this.particle, location1, 0);
+        location2.getWorld().spawnParticle(this.particle, location2, 0);
     }
 
     /**
