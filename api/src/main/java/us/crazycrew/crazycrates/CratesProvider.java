@@ -1,6 +1,5 @@
 package us.crazycrew.crazycrates;
 
-import org.jetbrains.annotations.ApiStatus;
 import us.crazycrew.crazycrates.platform.Server;
 
 /**
@@ -9,36 +8,29 @@ import us.crazycrew.crazycrates.platform.Server;
  * @author Ryder Belserion
  * @version 0.4
  */
-public class CrazyCratesProvider {
+public class CratesProvider {
 
     private static Server instance;
 
     public static Server get() {
         if (instance == null) {
-            throw new IllegalStateException("CrazyCrates is not loaded.");
+            throw new IllegalStateException("CrazyCrates API is not loaded.");
         }
 
         return instance;
     }
 
-    @ApiStatus.Internal
-    private CrazyCratesProvider() {
+    private CratesProvider() {
         throw new UnsupportedOperationException("This class cannot be instantiated");
     }
 
-    @ApiStatus.Internal
     public static void register(Server instance) {
-        if (CrazyCratesProvider.instance != null) {
-            instance.getLogger().warning("CrazyCrates is already enabled.");
+        if (CratesProvider.instance != null) return;
 
-            return;
-        }
-
-        CrazyCratesProvider.instance = instance;
+        CratesProvider.instance = instance;
     }
 
-    @ApiStatus.Internal
     public static void unregister() {
-        CrazyCratesProvider.instance = null;
+        CratesProvider.instance = null;
     }
 }
