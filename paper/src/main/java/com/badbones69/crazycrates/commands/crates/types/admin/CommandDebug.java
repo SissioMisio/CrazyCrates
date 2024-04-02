@@ -21,7 +21,7 @@ public class CommandDebug extends BaseCommand {
         Crate crate = this.crateManager.getCrate(crateName);
 
         if (crate == null) {
-            player.sendMessage(Messages.not_a_crate.getMessage("{crate}", crateName, player));
+            player.sendMessage(Messages.not_a_crate.getMessage(player, "{crate}", crateName));
 
             return;
         }

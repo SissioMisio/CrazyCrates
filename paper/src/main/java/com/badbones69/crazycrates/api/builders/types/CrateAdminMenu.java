@@ -2,13 +2,12 @@ package com.badbones69.crazycrates.api.builders.types;
 
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.api.enums.Permissions;
-import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.platform.crates.KeyManager;
 import com.badbones69.crazycrates.platform.crates.UserManager;
 import com.badbones69.crazycrates.platform.crates.objects.Key;
 import com.badbones69.crazycrates.platform.utils.ItemUtils;
-import com.ryderbelserion.cluster.items.ItemBuilder;
 import com.ryderbelserion.cluster.items.ParentBuilder;
+import com.ryderbelserion.cluster.utils.AdvUtils;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.Material;
@@ -79,7 +78,7 @@ public class CrateAdminMenu extends InventoryBuilder {
                         placeholders.put("{keytype}", KeyType.physical_key.getFriendlyName());
                         placeholders.put("{amount}", "1");
 
-                        player.sendActionBar(Messages.obtaining_keys.getMessage(placeholders, player));
+                        player.sendActionBar(AdvUtils.parse(Messages.obtaining_keys.getMessage(player, placeholders)));
                     }
 
                     case RIGHT -> {
@@ -90,7 +89,7 @@ public class CrateAdminMenu extends InventoryBuilder {
                         placeholders.put("{keytype}", KeyType.physical_key.getFriendlyName());
                         placeholders.put("{amount}", "8");
 
-                        player.sendActionBar(Messages.obtaining_keys.getMessage(placeholders, player));
+                        player.sendActionBar(AdvUtils.parse(Messages.obtaining_keys.getMessage(player, placeholders)));
                     }
                 }
             });

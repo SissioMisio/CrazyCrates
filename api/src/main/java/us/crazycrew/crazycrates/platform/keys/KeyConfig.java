@@ -1,7 +1,7 @@
 package us.crazycrew.crazycrates.platform.keys;
 
-import org.simpleyaml.configuration.file.YamlConfiguration;
-
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +24,7 @@ public class KeyConfig extends YamlConfiguration {
      *
      * @throws IOException if the file fails to load
      */
-    public void load() throws IOException {
+    public void load() throws IOException, InvalidConfigurationException {
         load(this.file);
     }
 

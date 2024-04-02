@@ -1,6 +1,5 @@
 package com.badbones69.crazycrates.platform.utils;
 
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -43,17 +42,5 @@ public class MsgUtils {
 
     public static String getPrefix(String msg) {
         return color(getPrefix() + msg);
-    }
-
-    public static String sanitizeColor(String msg) {
-        return sanitizeFormat(color(msg));
-    }
-
-    public static String sanitizeFormat(String string) {
-        return TextComponent.toLegacyText(TextComponent.fromLegacyText(string));
-    }
-
-    public static String removeColor(String msg) {
-        return ChatColor.stripColor(msg);
     }
 }

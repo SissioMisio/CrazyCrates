@@ -2,11 +2,9 @@ package com.badbones69.crazycrates.api.enums;
 
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.properties.Property;
-import com.badbones69.crazycrates.platform.utils.MiscUtils;
-import com.badbones69.crazycrates.platform.utils.MsgUtils;
-import com.ryderbelserion.cluster.utils.AdvUtils;
-import com.ryderbelserion.cluster.utils.StringUtils;
-import net.kyori.adventure.text.Component;
+import com.badbones69.crazycrates.support.PluginSupport;
+import com.ryderbelserion.vital.utils.MiscUtils;
+import org.bukkit.command.CommandSender;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import us.crazycrew.crazycrates.platform.config.impl.messages.CommandKeys;
 import us.crazycrew.crazycrates.platform.config.impl.messages.CrateKeys;
@@ -87,78 +85,101 @@ public enum Messages {
 
     private Property<String> property;
 
-    private Property<List<String>> listProperty;
-
-    private String message;
-
+    private Property<List<String>> properties;
     private boolean isList = false;
 
-    /**
-     * Used for strings
-     *
-     * @param property the property
-     */
     Messages(Property<String> property) {
         this.property = property;
     }
 
-    /**
-     * Used for string lists
-     *
-     * @param listProperty the list property
-     * @param isList Defines if it's a list or not.
-     */
-    Messages(Property<List<String>> listProperty, boolean isList) {
-        this.listProperty = listProperty;
-
+    Messages(Property<List<String>> properties, boolean isList) {
+        this.properties = properties;
         this.isList = isList;
     }
 
-    private final @NotNull SettingsManager configuration = ConfigManager.getMessages();
+    private final @NotNull SettingsManager config = ConfigManager.getConfig();
 
-    private boolean isList() {
+    private final @NotNull SettingsManager messages = ConfigManager.getMessages();
+
+    public @NotNull String getString() {
+        return this.messages.getProperty(this.property);
+    }
+
+    public @NotNull List<String> getList() {
+        return this.messages.getProperty(this.properties);
+    }
+
+    public boolean isList() {
         return this.isList;
     }
 
-    private @NotNull List<String> getPropertyList(Property<List<String>> properties) {
-        return this.configuration.getProperty(properties);
+    public String getDiscordMessage() {
+        return getDiscordMessage(new HashMap<>());
     }
 
-    private @NotNull String getProperty(Property<String> property) {
-        return this.configuration.getProperty(property);
+    public String getDiscordMessage(String placeholder, String replacement) {
+        Map<String, String> placeholders = new HashMap<>() {{
+            put(placeholder, replacement);
+        }};
+
+        return getDiscordMessage(placeholders);
     }
 
-    public Component getMessage() {
-        return getMessage(new HashMap<>(), null);
+    public String getDiscordMessage(Map<String, String> placeholders) {
+        return parse(placeholders);
     }
 
-    public Component getMessage(Player player) {
-        return getMessage(new HashMap<>(), player);
+    public String getMessage() {
+        return getMessage(null, new HashMap<>());
     }
 
-    public Component getMessage(Map<String, String> placeholders) {
-        return getMessage(placeholders, null);
+    public String getMessage(CommandSender sender) {
+        if (sender instanceof Player player) {
+            return getMessage(player, new HashMap<>());
+        }
+
+        return getMessage(null, new HashMap<>());
     }
 
-    public Component getMessage(String placeholder, String replacement, Player player) {
-        Map<String, String> placeholders = new HashMap<>();
-        placeholders.put(placeholder, replacement);
-
-        return getMessage(placeholders, player);
+    public String getMessage(Map<String, String> placeholders) {
+        return getMessage(null, placeholders);
     }
 
-    public Component getMessage(String placeholder, String replacement) {
-        return getMessage(placeholder, replacement, null);
+    public String getMessage(String placeholder, String replacement) {
+        return getMessage(null, placeholder, replacement);
     }
 
-    public Component getMessage(Map<String, String> placeholders, Player player) {
-        // Get the string first.
+    public String getMessage(CommandSender sender, String placeholder, String replacement) {
+        Map<String, String> placeholders = new HashMap<>() {{
+            put(placeholder, replacement);
+        }};
+
+        if (sender instanceof Player player) {
+            return getMessage(player, placeholders);
+        }
+
+        return getMessage(null, placeholders);
+    }
+
+    public String getMessage(Player player, Map<String, String> placeholders) {
+        String prefix = this.config.getProperty(ConfigKeys.command_prefix);
+
+        String message = parse(placeholders);
+
+        if (PluginSupport.placeholderapi.isPluginEnabled() && player != null) {
+            return PlaceholderAPI.setPlaceholders(player, message.replaceAll("\\{prefix}", prefix));
+        }
+
+        return message.replaceAll("\\{prefix}", prefix);
+    }
+
+    private String parse(Map<String, String> placeholders) {
         String message;
 
         if (isList()) {
-            message = StringUtils.convertList(getPropertyList(this.listProperty));
+            message = MiscUtils.convertList(getList());
         } else {
-            message = getProperty(this.property);
+            message = getString();
         }
 
         if (!placeholders.isEmpty()) {
@@ -167,20 +188,6 @@ public enum Messages {
             }
         }
 
-        this.message = message;
-
-        return asComponent(player);
-    }
-
-    private Component asComponent(Player player) {
-        String prefix = ConfigManager.getConfig().getProperty(ConfigKeys.command_prefix);
-
-        String message = this.message.replaceAll("\\{prefix}", prefix);
-
-        if (MiscUtils.isPapiActive() && player != null) {
-            return AdvUtils.parse(PlaceholderAPI.setPlaceholders(player, message));
-        }
-
-        return AdvUtils.parse(message);
+        return message;
     }
 }

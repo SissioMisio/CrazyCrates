@@ -22,25 +22,13 @@ public class CommandPreview extends BaseCommand {
         Crate crate = this.crateManager.getCrate(crateName);
 
         if (crate == null) {
-            if (sender instanceof Player player) {
-                player.sendMessage(Messages.not_a_crate.getMessage("{crate}", crateName, player));
-
-                return;
-            }
-
-            sender.sendMessage(Messages.not_a_crate.getMessage("{crate}", crateName));
+            sender.sendMessage(Messages.not_a_crate.getMessage(sender, "{crate}", crateName));
 
             return;
         }
 
         if (!crate.isPreviewToggle()) {
-            if (sender instanceof Player player) {
-                player.sendMessage(Messages.preview_disabled.getMessage("{crate}", crate.getName(), player));
-
-                return;
-            }
-
-            sender.sendMessage(Messages.preview_disabled.getMessage("{crate}", crate.getName()));
+            sender.sendMessage(Messages.preview_disabled.getMessage(sender, "{crate}", crate.getName()));
 
             return;
         }

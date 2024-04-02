@@ -27,7 +27,8 @@ public class CommandManager {
 
         Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
 
-        getCommandManager().registerSuggestion(SuggestionKey.of("players"), (sender, context) -> players.stream().map(Player::getName).toList());
+        getCommandManager().registerSuggestion(SuggestionKey.of("players"), (sender, context) -> players.stream()
+                .map(Player::getName).toList());
 
         getCommandManager().registerSuggestion(SuggestionKey.of("numbers"), (sender, context) -> {
             List<String> numbers = new ArrayList<>();

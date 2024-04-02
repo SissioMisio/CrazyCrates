@@ -1,4 +1,4 @@
-package com.badbones69.crazycrates.api.builders.types;
+package com.badbones69.crazycrates.api.builders.types.v1;
 
 import com.badbones69.crazycrates.api.objects.Crate;
 import org.bukkit.entity.Player;

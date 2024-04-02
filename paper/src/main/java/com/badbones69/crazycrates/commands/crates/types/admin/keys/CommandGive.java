@@ -38,8 +38,8 @@ public class CommandGive extends BaseCommand {
             return;
         }
 
-        OfflinePlayer offlinePlayer = target.getOfflinePlayer();
+        //OfflinePlayer offlinePlayer = target.getOfflinePlayer();
 
-        this.userManager.addVirtualKeys(offlinePlayer.getUniqueId(), key.getKeyName(), amount);
+        //this.userManager.addVirtualKeys(offlinePlayer, key.getKeyName(), amount);
     }
 }

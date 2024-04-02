@@ -1,6 +1,6 @@
 package us.crazycrew.crazycrates.platform.crates.types;
 
-import org.simpleyaml.configuration.ConfigurationSection;
+import org.bukkit.configuration.ConfigurationSection;
 import us.crazycrew.crazycrates.platform.crates.CrateConfig;
 
 public abstract class AbstractCrateManager {

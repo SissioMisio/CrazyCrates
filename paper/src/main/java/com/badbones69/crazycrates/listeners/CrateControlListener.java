@@ -230,7 +230,7 @@ public class CrateControlListener implements Listener {
                 player.playSound(player.getLocation(), Sound.valueOf(this.config.getProperty(ConfigKeys.need_key_sound)), SoundCategory.PLAYERS, 1f, 1f);
             }
 
-            player.sendMessage(Messages.no_keys.getMessage(placeholders, player));
+            player.sendMessage(Messages.no_keys.getMessage(player, placeholders));
         //}
     }
 

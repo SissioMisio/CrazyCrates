@@ -11,8 +11,6 @@ public abstract class MessageManager {
 
     public abstract void build();
 
-    public abstract void send(@NotNull CommandSender sender, @NotNull Component component);
-
-    public abstract Component parse(@NotNull String message);
+    public abstract void send(@NotNull CommandSender sender, @NotNull String component);
 
 }

@@ -1,19 +1,18 @@
 package us.crazycrew.crazycrates.platform.crates;
 
-import org.simpleyaml.configuration.ConfigurationSection;
-import org.simpleyaml.configuration.file.YamlFile;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
-
 import java.io.File;
 import java.io.IOException;
 
-public class CrateConfig extends YamlFile {
+public class CrateConfig extends YamlConfiguration {
 
-    private final YamlFile file;
+    private final YamlConfiguration file;
     private final String name;
 
     public CrateConfig(File file) {
-        this.file = new YamlFile(file.getPath());
+        this.file = YamlConfiguration.loadConfiguration(file);
 
         this.name = file.getName().replaceAll(".yml", "");
     }
@@ -21,11 +20,6 @@ public class CrateConfig extends YamlFile {
     @Override
     public ConfigurationSection getConfigurationSection(String path) {
         return this.file.getConfigurationSection(path);
-    }
-
-    @Override
-    public void load() throws IOException {
-        this.file.createOrLoadWithComments();
     }
 
     /**
@@ -38,7 +32,7 @@ public class CrateConfig extends YamlFile {
     /**
      * @return the crate file.
      */
-    public YamlFile getFile() {
+    public YamlConfiguration getConfiguration() {
         return this.file;
     }
 

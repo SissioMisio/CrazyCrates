@@ -1,8 +1,5 @@
 package us.crazycrew.crazycrates.api.users;
 
-import net.kyori.adventure.audience.Audience;
-import us.crazycrew.crazycrates.api.enums.types.KeyType;
-
 import java.util.UUID;
 
 /**
@@ -13,22 +10,6 @@ import java.util.UUID;
  * @version 0.4
  */
 public abstract class UserManager {
-
-    /**
-     * Checks if user is null.
-     *
-     * @param uuid the uuid of the player.
-     * @return true or false.
-     */
-    public abstract boolean isUserNull(UUID uuid);
-
-    /**
-     * Get the player
-     *
-     * @param uuid the uuid of the player.
-     * @return the player.
-     */
-    public abstract Audience getUser(UUID uuid);
 
     /**
      * Get the amount of virtual keys a player has.

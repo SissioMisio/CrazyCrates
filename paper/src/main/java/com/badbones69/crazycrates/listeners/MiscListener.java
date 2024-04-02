@@ -2,9 +2,9 @@ package com.badbones69.crazycrates.listeners;
 
 import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.api.builders.types.CrateAdminMenu;
-import com.badbones69.crazycrates.api.builders.types.CrateMainMenu;
-import com.badbones69.crazycrates.api.builders.types.CratePreviewMenu;
-import com.badbones69.crazycrates.api.builders.types.CratePrizeMenu;
+import com.badbones69.crazycrates.api.builders.types.v1.CrateMainMenu;
+import com.badbones69.crazycrates.api.builders.types.v1.CratePreviewMenu;
+import com.badbones69.crazycrates.api.builders.types.v1.CratePrizeMenu;
 import com.badbones69.crazycrates.platform.crates.UserManager;
 import com.badbones69.crazycrates.tasks.InventoryManager;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
@@ -20,7 +20,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazycrates.api.enums.types.CrateType;
 
 public class MiscListener implements Listener {
 

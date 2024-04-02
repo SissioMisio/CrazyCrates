@@ -4,8 +4,8 @@ import ch.jalu.configme.SettingsManager;
 import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.api.objects.Tier;
-import com.badbones69.crazycrates.platform.utils.MiscUtils;
-import com.ryderbelserion.cluster.utils.AdvUtils;
+import com.ryderbelserion.vital.api.enums.Support;
+import com.ryderbelserion.vital.utils.MiscUtils;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.Gui;
@@ -40,7 +40,7 @@ public abstract class InventoryBuilder {
         this.player = player;
         this.rows = rows;
 
-        this.title = MiscUtils.isPapiActive() ? AdvUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : AdvUtils.parse(this.guiName);
+        this.title = Support.placeholder_api.isEnabled() ? MiscUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : MiscUtils.parse(this.guiName);
 
         this.gui = Gui.gui().title(this.title).rows(this.rows).apply(consumer -> consumer.setDefaultTopClickAction(event -> event.setCancelled(true))).create();
     }
@@ -52,7 +52,7 @@ public abstract class InventoryBuilder {
 
         this.crate = crate;
 
-        this.title = MiscUtils.isPapiActive() ? AdvUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : AdvUtils.parse(this.guiName);
+        this.title = Support.placeholder_api.isEnabled() ? MiscUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : MiscUtils.parse(this.guiName);
 
         this.gui = Gui.gui().title(this.title).rows(this.rows).apply(consumer -> consumer.setDefaultTopClickAction(event -> event.setCancelled(true))).create();
     }
@@ -65,7 +65,7 @@ public abstract class InventoryBuilder {
 
         this.crate = crate;
 
-        this.title = MiscUtils.isPapiActive() ? AdvUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : AdvUtils.parse(this.guiName);
+        this.title = Support.placeholder_api.isEnabled() ? MiscUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : MiscUtils.parse(this.guiName);
 
         this.gui = Gui.gui().title(this.title).rows(this.rows).apply(consumer -> consumer.setDefaultTopClickAction(event -> event.setCancelled(true))).create();
     }
@@ -79,7 +79,7 @@ public abstract class InventoryBuilder {
 
         this.tiers = tiers;
 
-        this.title = MiscUtils.isPapiActive() ? AdvUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : AdvUtils.parse(this.guiName);
+        this.title = Support.placeholder_api.isEnabled() ? MiscUtils.parse(PlaceholderAPI.setPlaceholders(getPlayer(), this.guiName)) : MiscUtils.parse(this.guiName);
 
         this.gui = Gui.gui().title(this.title).rows(this.rows).apply(consumer -> consumer.setDefaultTopClickAction(event -> event.setCancelled(true))).create();
     }
@@ -100,7 +100,7 @@ public abstract class InventoryBuilder {
                 return true;
             }
 
-            if (MiscUtils.isLogging()) this.plugin.getLogger().warning("The property " + ConfigKeys.menu_button_command_list.getPath() + " is empty so no commands were run.");
+            //if () this.plugin.getLogger().warning("The property " + ConfigKeys.menu_button_command_list.getPath() + " is empty so no commands were run.");
 
             return true;
         }

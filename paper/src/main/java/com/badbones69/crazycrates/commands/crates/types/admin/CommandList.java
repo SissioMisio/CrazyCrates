@@ -1,7 +1,5 @@
 package com.badbones69.crazycrates.commands.crates.types.admin;
 
-import com.badbones69.crazycrates.api.objects.Crate;
-import com.badbones69.crazycrates.api.objects.other.CrateLocation;
 import com.badbones69.crazycrates.commands.crates.BaseCommand;
 import com.badbones69.crazycrates.platform.utils.MsgUtils;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
@@ -10,9 +8,6 @@ import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class CommandList extends BaseCommand {
 

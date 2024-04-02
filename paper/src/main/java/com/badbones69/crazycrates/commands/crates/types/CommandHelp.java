@@ -1,6 +1,6 @@
 package com.badbones69.crazycrates.commands.crates.types;
 
-import com.badbones69.crazycrates.api.builders.types.CrateMainMenu;
+import com.badbones69.crazycrates.api.builders.types.v1.CrateMainMenu;
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.commands.crates.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -16,9 +16,11 @@ public class CommandHelp extends BaseCommand {
     @Permission("crazycrates.gui")
     public void gui(Player player) {
         if (this.config.getProperty(ConfigKeys.enable_crate_menu)) {
-            //CrateMainMenu crateMainMenu = new CrateMainMenu(player, this.config.getProperty(ConfigKeys.inventory_size), this.config.getProperty(ConfigKeys.inventory_name));
-
-            //player.openInventory(crateMainMenu.build().getInventory());
+            new CrateMainMenu(
+                    this.config.getProperty(ConfigKeys.inventory_name),
+                    this.config.getProperty(ConfigKeys.inventory_size),
+                    player
+            ).build().getGui().open(player);
 
             return;
         }
@@ -29,18 +31,8 @@ public class CommandHelp extends BaseCommand {
     @Command("help")
     @Permission(value = "crazycrates.help", def = PermissionDefault.TRUE)
     public void help(CommandSender sender) {
-        if (sender instanceof Player player) {
-            if (player.hasPermission("crazycrates.admin")) {
-                player.sendMessage(Messages.admin_help.getMessage(player));
+        String message = sender.hasPermission("crazycrates.admin") ? Messages.admin_help.getMessage(sender) : Messages.help.getMessage(sender);
 
-                return;
-            }
-
-            player.sendMessage(Messages.help.getMessage(player));
-
-            return;
-        }
-
-        sender.sendMessage(Messages.admin_help.getMessage());
+        sender.sendMessage(message);
     }
 }

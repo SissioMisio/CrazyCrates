@@ -6,8 +6,9 @@ import com.badbones69.crazycrates.platform.utils.MsgUtils;
 import com.badbones69.crazycrates.support.PluginSupport;
 import com.badbones69.crazycrates.support.SkullSupport;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.ryderbelserion.cluster.utils.DyeUtils;
-import com.ryderbelserion.cluster.utils.RegistryUtils;
+import com.ryderbelserion.vital.utils.DyeUtils;
+import com.ryderbelserion.vital.utils.ItemUtils;
+import com.ryderbelserion.vital.utils.RegistryUtils;
 import io.th0rgal.oraxen.api.OraxenItems;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.minecraft.nbt.TagParser;
@@ -32,7 +33,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazycrates.platform.utils.EnchantUtil;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1186,7 +1186,7 @@ public class ItemBuilder {
                         if (!value.isEmpty()) itemBuilder.setTrimMaterial(Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(value.toLowerCase())));
                     }
                     default -> {
-                        Enchantment enchantment = RegistryUtils.getEnchantment(EnchantUtil.getEnchant(option));
+                        Enchantment enchantment = RegistryUtils.getEnchantment(ItemUtils.getEnchant(option));
 
                         if (enchantment != null) {
                             try {

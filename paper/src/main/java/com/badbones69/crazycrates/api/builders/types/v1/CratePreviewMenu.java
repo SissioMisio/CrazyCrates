@@ -1,4 +1,4 @@
-package com.badbones69.crazycrates.api.builders.types;
+package com.badbones69.crazycrates.api.builders.types.v1;
 
 import ch.jalu.configme.SettingsManager;
 import com.badbones69.crazycrates.CrazyCratesPaper;

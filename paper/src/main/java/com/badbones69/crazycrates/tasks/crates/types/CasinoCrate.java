@@ -9,6 +9,7 @@ import com.badbones69.crazycrates.platform.crates.objects.Key;
 import com.badbones69.crazycrates.platform.utils.MiscUtils;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
 import org.bukkit.SoundCategory;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,9 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import org.simpleyaml.configuration.ConfigurationSection;
 import us.crazycrew.crazycrates.api.enums.types.KeyType;
-
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 

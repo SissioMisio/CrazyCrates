@@ -3,8 +3,10 @@ package com.badbones69.crazycrates.api.objects;
 import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
 import com.badbones69.crazycrates.api.enums.PersistentKeys;
-import com.ryderbelserion.cluster.utils.RegistryUtils;
+import com.ryderbelserion.vital.utils.ItemUtils;
+import com.ryderbelserion.vital.utils.RegistryUtils;
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,9 +16,7 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.simpleyaml.configuration.ConfigurationSection;
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
-import us.crazycrew.crazycrates.platform.utils.EnchantUtil;
 import java.util.*;
 
 public class Prize {
@@ -111,7 +111,7 @@ public class Prize {
 
         if (this.section.contains("DisplayEnchantments")) {
             for (String enchant : this.section.getStringList("DisplayEnchantments")) {
-                Enchantment enchantment = RegistryUtils.getEnchantment(EnchantUtil.getEnchant(enchant.split(":")[0]));
+                Enchantment enchantment = RegistryUtils.getEnchantment(ItemUtils.getEnchant(enchant.split(":")[0]));
 
                 if (enchantment != null) {
                     this.displayItem.addEnchantment(enchantment, Integer.parseInt(enchant.split(":")[1]));

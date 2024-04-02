@@ -2,14 +2,13 @@ package com.badbones69.crazycrates.api.objects;
 
 import com.badbones69.crazycrates.CrazyCratesPaper;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
-import com.badbones69.crazycrates.api.builders.types.CratePreviewMenu;
-import com.badbones69.crazycrates.api.builders.types.CrateTierMenu;
+import com.badbones69.crazycrates.api.builders.types.v1.CratePreviewMenu;
+import com.badbones69.crazycrates.api.builders.types.v1.CrateTierMenu;
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.api.enums.PersistentKeys;
 import com.badbones69.crazycrates.api.events.PlayerPrizeEvent;
 import com.badbones69.crazycrates.platform.utils.MiscUtils;
 import com.badbones69.crazycrates.platform.utils.MsgUtils;
-import com.badbones69.crazycrates.support.PluginSupport;
 import com.badbones69.crazycrates.tasks.InventoryManager;
 import com.badbones69.crazycrates.tasks.crates.effects.SoundEffect;
 import com.badbones69.crazycrates.tasks.crates.other.CasinoCrateManager;
@@ -17,6 +16,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +28,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.simpleyaml.configuration.ConfigurationSection;
 import us.crazycrew.crazycrates.api.crates.CrateHologram;
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
 import us.crazycrew.crazycrates.platform.crates.CrateConfig;
@@ -37,7 +36,6 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import static java.util.regex.Matcher.quoteReplacement;
 
 public class Crate {
@@ -507,11 +505,11 @@ public class Crate {
     }
 
     public void playSound(Player player, String type, String fallback, SoundCategory category) {
-        new SoundEffect(this.crateConfig.getSoundSection(), type, fallback, category).play(player, player.getLocation());
+        //new SoundEffect(this.crateConfig.getSoundSection(), type, fallback, category).play(player, player.getLocation());
     }
 
     public void playSound(Player player, Location location, String type, String fallback, SoundCategory category) {
-        new SoundEffect(this.crateConfig.getSoundSection(), type, fallback, category).play(player, location);
+        //new SoundEffect(this.crateConfig.getSoundSection(), type, fallback, category).play(player, location);
     }
 
     /**
@@ -737,7 +735,7 @@ public class Crate {
                 placeholders.put("{crate}", getName());
                 placeholders.put("{prize}", prize.getPrizeName());
 
-                player.sendMessage(Messages.prize_error.getMessage(placeholders, player));
+                player.sendMessage(Messages.prize_error.getMessage(player, placeholders));
 
                 continue;
             }

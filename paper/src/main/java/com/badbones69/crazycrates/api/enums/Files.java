@@ -1,10 +1,10 @@
 package com.badbones69.crazycrates.api.enums;
 
 import com.badbones69.crazycrates.CrazyCratesPaper;
-import com.ryderbelserion.cluster.api.files.FileManager;
+import com.ryderbelserion.vital.files.FileManager;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 public enum Files {
 
