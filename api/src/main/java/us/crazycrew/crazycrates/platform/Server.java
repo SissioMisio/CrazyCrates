@@ -31,12 +31,12 @@ public class Server {
                 "WarCrateExample.yml",
                 "QuadCrateExample.yml",
                 "QuickCrateExample.yml"
-        ).forEach(file -> this.plugin.saveResource(this.crateFolder + "/" + file, false));
+        ).forEach(file -> this.plugin.saveResource("crates/" + file, false));
 
         List.of(
                 "CasinoKey.yml",
                 "DiamondKey.yml"
-        ).forEach(file -> this.plugin.saveResource(this.keyFolder + "/" + file, false));
+        ).forEach(file -> this.plugin.saveResource("keys/" + file, false));
 
         CratesProvider.register(this);
     }
