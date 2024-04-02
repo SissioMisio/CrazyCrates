@@ -16,28 +16,21 @@ dependencies {
 
     implementation(libs.bundles.triumph)
 
-    api(libs.cluster.paper) {
-        isTransitive = true
-    }
-
     implementation(libs.config.me) {
         exclude(group = "org.yaml", module = "snakeyaml")
     }
+
+    implementation(libs.vital.api)
 
     implementation(libs.metrics)
 
     implementation(projects.api)
 
-    compileOnly(libs.head.database.api)
-
-    compileOnly(libs.bundles.adventure)
-
     compileOnly(libs.bundles.holograms)
 
+    compileOnly(libs.head.database.api)
     compileOnly(libs.placeholder.api)
-
     compileOnly(libs.itemsadder.api)
-
     compileOnly(libs.oraxen.api)
 
     compileOnly(libs.vault)

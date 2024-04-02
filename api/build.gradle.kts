@@ -1,16 +1,20 @@
 plugins {
-    `root-plugin`
+    `paper-plugin`
+
+    id("io.papermc.paperweight.userdev")
 }
 
 project.group = "us.crazycrew.crazycrates"
-project.version = "0.4-SNAPSHOT"
+project.version = "0.4"
 
 base {
     archivesName.set("${rootProject.name}-${project.name}")
 }
 
 dependencies {
-    implementation(libs.cluster.api)
+    paperweight.paperDevBundle(libs.versions.bundle)
+
+    compileOnly(libs.vital.api)
 
     compileOnly(libs.config.me)
 }
@@ -26,10 +30,10 @@ tasks {
     publishing {
         repositories {
             maven {
-                if (project.version.toString().contains("SNAPSHOT")) {
-                    url = uri("https://repo.crazycrew.us/snapshots/")
+                url = if (project.version.toString().contains("SNAPSHOT")) {
+                    uri("https://repo.crazycrew.us/snapshots/")
                 } else {
-                    url = uri("https://repo.crazycrew.us/releases/")
+                    uri("https://repo.crazycrew.us/releases/")
                 }
 
                 credentials {
