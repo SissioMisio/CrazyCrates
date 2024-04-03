@@ -1,6 +1,7 @@
 package com.badbones69.crazycrates;
 
 import com.badbones69.crazycrates.commands.CommandManager;
+import com.ryderbelserion.vital.VitalPlugin;
 import us.crazycrew.crazycrates.platform.Server;
 import com.badbones69.crazycrates.platform.crates.CrateManager;
 import com.badbones69.crazycrates.platform.crates.KeyManager;
@@ -8,6 +9,8 @@ import com.badbones69.crazycrates.platform.crates.UserManager;
 import com.ryderbelserion.vital.files.FileManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazycrates.platform.config.ConfigManager;
+import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
 
 public class CrazyCrates extends JavaPlugin {
 
@@ -15,12 +18,17 @@ public class CrazyCrates extends JavaPlugin {
     private UserManager userManager;
     private FileManager fileManager;
     private KeyManager keyManager;
+    private VitalPlugin vital;
     private Server instance;
 
     @Override
     public void onLoad() {
         this.instance = new Server(this);
         this.instance.enable();
+
+        this.vital = new VitalPlugin(this);
+        this.vital.setLogging(ConfigManager.getConfig().getProperty(ConfigKeys.verbose_logging));
+        this.vital.start();
 
         this.fileManager = new FileManager();
         this.fileManager
@@ -53,6 +61,10 @@ public class CrazyCrates extends JavaPlugin {
     public void onDisable() {
         if (this.instance != null) {
             this.instance.disable();
+        }
+
+        if (this.vital != null) {
+            this.vital.stop();
         }
     }
 
