@@ -23,7 +23,17 @@ public class CrazyCrates extends JavaPlugin {
         this.instance.enable();
 
         this.fileManager = new FileManager();
-        this.fileManager.addStaticFile("locations.yml").addStaticFile("data.yml").create();
+        this.fileManager
+                .addDynamicFile("crates", "CrateExample.yml")
+                .addDynamicFile("crates", "QuadCrateExample.yml")
+                .addDynamicFile("crates", "QuickCrateExample.yml")
+                .addDynamicFile("crates", "WarCrateExample.yml")
+                .addDynamicFile("keys", "CasinoKey.yml")
+                .addDynamicFile("keys", "DiamondKey.yml")
+                .addStaticFile("locations.yml")
+                .addStaticFile("data.yml")
+                .addFolder("crates")
+                .addFolder("keys").create();
     }
 
     @Override

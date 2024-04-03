@@ -4,9 +4,7 @@ import us.crazycrew.crazycrates.CratesProvider;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class Server {
@@ -25,18 +23,6 @@ public class Server {
 
     public void enable() {
         ConfigManager.load(this.plugin.getDataFolder());
-
-        List.of(
-                "CrateExample.yml",
-                "WarCrateExample.yml",
-                "QuadCrateExample.yml",
-                "QuickCrateExample.yml"
-        ).forEach(file -> this.plugin.saveResource("crates/" + file, false));
-
-        List.of(
-                "CasinoKey.yml",
-                "DiamondKey.yml"
-        ).forEach(file -> this.plugin.saveResource("keys/" + file, false));
 
         CratesProvider.register(this);
     }
