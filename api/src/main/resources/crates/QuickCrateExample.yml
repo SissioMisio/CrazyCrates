@@ -106,7 +106,8 @@ Crate:
         - '&6&lChance: &c&l40%'
       DisplayEnchantments:
         - 'protection:2'
-      Chance: 40.0
+      MaxRange: 100
+      Chance: 40
       Items:
         - 'Item:chainmail_leggings, Amount:1, Damage:75, Trim-Pattern:sentry, Trim-Material:lapis, Name:&aFancy Pants, protection:2'
       Messages:
@@ -125,7 +126,8 @@ Crate:
       DisplayEnchantments:
         - 'sharpness:2'
         - 'fire_aspect:1'
-      Chance: 35.0
+      MaxRange: 100
+      Chance: 35
       Items:
         - 'Item:diamond_sword, Amount:1, Damage:7, Name:&bClassic Sword, sharpness:2, fire_aspect:1'
       Messages:
@@ -137,7 +139,8 @@ Crate:
       Lore:
         - '&7Make it rain a lot of Money.'
         - '&6&lChance: &c&l20%'
-      Chance: 20.0
+      MaxRange: 100
+      Chance: 20
       Firework: true
       Commands:
         - 'eco give %player% 100000'

@@ -700,14 +700,16 @@ public class Crate {
     private void chanceCheck(List<Prize> prizes, List<Prize> usablePrizes) {
         for (int stop = 0; prizes.isEmpty() && stop <= 2000; stop++) {
             for (Prize prize : usablePrizes) {
-                double max = prize.getMaxRange();
-                double chance = prize.getChance();
-                double num;
+                int max = prize.getMaxRange();
+                int chance = prize.getChance();
+                int num;
 
                 for (int counter = 1; counter <= 1; counter++) {
-                    num = MiscUtils.useOtherRandom() ? 1 + ThreadLocalRandom.current().nextDouble(max) : 1 + new Random().nextDouble(max);
+                    num = MiscUtils.useOtherRandom() ? ThreadLocalRandom.current().nextInt(max) : new Random().nextInt(max);
 
-                    if (num <= chance) prizes.add(prize);
+                    if (num >= 1 && num <= chance) {
+                        prizes.add(prize);
+                    }
                 }
             }
         }
@@ -846,11 +848,11 @@ public class Crate {
 
         for (int stopLoop = 0; stopLoop <= 100; stopLoop++) {
             for (Tier key : this.tiers) {
-                double chance = key.getChance();
+                int chance = key.getChance();
 
-                double number = MiscUtils.useOtherRandom() ? ThreadLocalRandom.current().nextDouble(100.0) : new Random().nextDouble(100.0);
+                int number = MiscUtils.useOtherRandom() ? ThreadLocalRandom.current().nextInt(key.getMaxRange()) : new Random().nextInt(key.getMaxRange());
 
-                if (number >= 1.0 && number <= chance) {
+                if (number >= 1 && number <= chance) {
                     tier = key;
 
                     break;

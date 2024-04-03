@@ -112,7 +112,8 @@ Crate:
       DisplayEnchantments:
         - 'protection:5'
         - 'unbreaking:3'
-      Chance: 40.0
+      MaxRange: 100
+      Chance: 40
       Items:
         - 'Item:diamond_chestplate, Amount:1, Damage:25, Trim-Pattern:sentry, Trim-Material:emerald, Name:&3Rare ChestPlate, protection:5, unbreaking:3'
     2:
@@ -128,7 +129,8 @@ Crate:
       DisplayEnchantments:
         - 'sharpness:5'
         - 'fire_aspect:1'
-      Chance: 35.0
+      MaxRange: 100
+      Chance: 35
       Items:
         - 'Item:golden_sword, Amount:1, Damage:13, Name:&b&lCrazy &4&lSword, sharpness:5, fire_aspect:1'
       Messages:
@@ -140,7 +142,8 @@ Crate:
       Lore:
         - '&7Make it rain a butt load of Money.'
         - '&6&lChance: &c&l20%'
-      Chance: 20.0
+      MaxRange: 100
+      Chance: 29
       Firework: true
       Commands:
         - 'eco give %player% 1000000'

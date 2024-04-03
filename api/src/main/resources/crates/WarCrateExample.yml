@@ -127,7 +127,8 @@ Crate:
       DisplayEnchantments:
         - 'protection:5'
         - 'unbreaking:3'
-      Chance: 40.0
+      MaxRange: 100
+      Chance: 40
       Items:
         - 'Item:netherite_helmet, Amount:1, Damage:25, Trim-Pattern:sentry, Trim-Material:redstone, Name:&4&lWarlord''s Helmet, protection:5, unbreaking:3'
     2:
@@ -145,7 +146,8 @@ Crate:
       DisplayEnchantments:
         - 'protection:5'
         - 'unbreaking:3'
-      Chance: 40.0
+      MaxRange: 100
+      Chance: 40
       Items:
         - 'Item:netherite_chestplate, Amount:1, Damage:25, Trim-Pattern:sentry, Trim-Material:redstone, Name:&4&lWarlord''s Chestplate, protection:5, unbreaking:3'
     3:
@@ -163,7 +165,8 @@ Crate:
       DisplayEnchantments:
         - 'protection:5'
         - 'sharpness:3'
-      Chance: 40.0
+      MaxRange: 100
+      Chance: 40
       Items:
         - 'Item:netherite_leggings, Amount:1, Damage:25, Trim-Pattern:sentry, Trim-Material:redstone, Name:&4&lWarlord''s Leggings, protection:5, unbreaking:3'
     4:
@@ -181,6 +184,7 @@ Crate:
       DisplayEnchantments:
         - 'protection:5'
         - 'sharpness:3'
-      Chance: 40.0
+      MaxRange: 100
+      Chance: 40
       Items:
         - 'Item:netherite_boots, Amount:1, Damage:25, Trim-Pattern:sentry, Trim-Material:redstone, Name:&4&lWarlord''s Boots, protection:5, unbreaking:3'

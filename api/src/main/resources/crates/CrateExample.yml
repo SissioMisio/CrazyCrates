@@ -127,11 +127,13 @@ Crate:
       # If you do not want a lore, Set the "Lore:" to look like the line below.
       # Lore: []
 
+      # The max range of the item.
+      MaxRange: 100
       #
       # 25 is 25% if Max Range is 100
       # Read more on "Chance" @ https://github.com/Crazy-Crew/Crazy-Crates/wiki/Chance-System
       #
-      Chance: 25.0 # The chance out of MaxRange to win an item.
+      Chance: 25 # The chance out of MaxRange to win an item.
 
       # Can be a name as well.
       Player: 'https://textures.minecraft.net/texture/1ee3126ff2c343da525eef2b93272b9fed36273d0ea08c2616b80009948ad57e' # Custom Texture Example.
@@ -179,7 +181,8 @@ Crate:
       Lore:
         - '&7Win a cheap helmet.'
         - '&6&lChance: &c&l60%'
-      Chance: 60.0
+      MaxRange: 100
+      Chance: 60
       Items:
         - 'Item:golden_helmet, Amount:1, Damage:50, Trim-Pattern:sentry, Trim-Material:quartz, Name:&bCheap Helmet, protection:1, respiration:1'
     3:
@@ -189,7 +192,8 @@ Crate:
       Lore:
         - '&7Make it rain Money.'
         - '&6&lChance: &c&l20%'
-      Chance: 20.0
+      MaxRange: 100
+      Chance: 20
       Firework: true
       Commands:
         - 'eco give %player% 1000'

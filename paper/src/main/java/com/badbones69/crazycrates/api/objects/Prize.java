@@ -37,7 +37,8 @@ public class Prize {
 
     private boolean isFirework = false;
 
-    private double chance = 0.0;
+    private int maxRange;
+    private int chance;
 
     private Prize alternativePrize;
 
@@ -79,7 +80,8 @@ public class Prize {
 
         this.isFirework = section.getBoolean("Firework", false);
 
-        this.chance = section.getDouble("Chance", 25.0);
+        this.maxRange = section.getInt("MaxRange", 100);
+        this.chance = section.getInt("Chance", 25);
 
         this.displayItem = new ItemBuilder()
                 .setMaterial(this.section.getString("DisplayItem", "red_terracotta"))
@@ -218,14 +220,14 @@ public class Prize {
     /**
      * @return the max range of the chance.
      */
-    public double getMaxRange() {
-        return 100.0;
+    public int getMaxRange() {
+        return this.maxRange;
     }
 
     /**
      * @return the chance the prize can be won.
      */
-    public double getChance() {
+    public int getChance() {
         return this.chance;
     }
 

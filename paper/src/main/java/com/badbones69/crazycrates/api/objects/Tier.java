@@ -16,7 +16,8 @@ public class Tier {
     private final List<String> displayLore;
     private final ItemBuilder itemBuilder;
     private final String displayName;
-    private final double chance;
+    private final int maxRange;
+    private final int chance;
     private final int slot;
 
     public Tier(String tier, ConfigurationSection section) {
@@ -28,7 +29,8 @@ public class Tier {
 
         this.displayName = section.getString("Name", "");
 
-        this.chance = section.getDouble("Chance", 10.0);
+        this.maxRange = section.getInt("MaxRange", 100);
+        this.chance = section.getInt("Chance", 10);
 
         this.slot = section.getInt("Slot");
     }
@@ -87,9 +89,16 @@ public class Tier {
     }
 
     /**
+     * @return the max range.
+     */
+    public int getMaxRange() {
+        return this.maxRange;
+    }
+
+    /**
      * @return the chance of being picked.
      */
-    public double getChance() {
+    public int getChance() {
         return this.chance;
     }
 
