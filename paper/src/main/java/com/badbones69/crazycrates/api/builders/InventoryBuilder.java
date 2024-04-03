@@ -26,7 +26,7 @@ public abstract class InventoryBuilder {
 
     protected final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
 
-    private Component title;
+    private final Component title;
     private List<Tier> tiers;
     private final Gui gui;
     private Player player;
