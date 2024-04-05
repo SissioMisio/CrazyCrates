@@ -10,15 +10,15 @@ plugins {
 dependencies {
     paperweight.paperDevBundle(libs.versions.bundle)
 
+    implementation(projects.vital.vitalPaper)
+
     implementation(libs.bundles.triumph)
+
+    implementation(libs.config.me)
 
     implementation(libs.metrics)
 
     implementation(projects.api)
-
-    implementation(project(":vital:vital-paper"))
-
-    implementation(libs.config.me)
 
     compileOnly(libs.bundles.holograms)
 

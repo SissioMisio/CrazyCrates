@@ -14,7 +14,7 @@ base {
 dependencies {
     paperweight.paperDevBundle(libs.versions.bundle)
 
-    compileOnly(project(":vital:vital-paper"))
+    compileOnly(projects.vital.vitalPaper)
 
     compileOnly(libs.config.me)
 }
