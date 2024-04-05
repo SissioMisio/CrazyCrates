@@ -20,11 +20,12 @@ dependencies {
         exclude(group = "org.yaml", module = "snakeyaml")
     }
 
-    implementation(libs.vital.api)
 
     implementation(libs.metrics)
 
     implementation(projects.api)
+
+    implementation(project(":vital:vital-paper"))
 
     compileOnly(libs.bundles.holograms)
 

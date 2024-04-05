@@ -12,8 +12,6 @@ paperweight-userdev = { group = "io.papermc.paperweight.userdev", name = "io.pap
 publishing-modrinth = { group = "com.modrinth.minotaur", name = "Minotaur", version = "2.8.7" }
 publishing-hangar = { group = "io.papermc", name = "hangar-publish-plugin", version = "0.1.2" }
 
-vital-api = { group = "com.ryderbelserion.vital", name = "vital-api", version = "1.0-SNAPSHOT" }
-
 fancy-holograms = { group = "de.oliver", name = "FancyHolograms", version = "2.0.6" }
 decent-holograms = { group = "com.github.decentsoftware-eu", name = "decentholograms", version = "2.8.6" }
 
