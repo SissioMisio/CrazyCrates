@@ -7,19 +7,10 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-repositories {
-    maven("https://repo.oraxen.com/releases/")
-}
-
 dependencies {
     paperweight.paperDevBundle(libs.versions.bundle)
 
     implementation(libs.bundles.triumph)
-
-    implementation(libs.config.me) {
-        exclude(group = "org.yaml", module = "snakeyaml")
-    }
-
 
     implementation(libs.metrics)
 
@@ -27,12 +18,9 @@ dependencies {
 
     implementation(project(":vital:vital-paper"))
 
-    compileOnly(libs.bundles.holograms)
+    implementation(libs.config.me)
 
-    compileOnly(libs.head.database.api)
-    compileOnly(libs.placeholder.api)
-    compileOnly(libs.itemsadder.api)
-    compileOnly(libs.oraxen.api)
+    compileOnly(libs.bundles.holograms)
 
     compileOnly(libs.vault)
 
@@ -52,7 +40,6 @@ tasks {
         archiveClassifier.set("")
 
         listOf(
-            "com.ryderbelserion.cluster",
             "dev.triumphteam.cmd",
             "dev.triumphteam.gui",
             "org.bstats"
@@ -63,6 +50,10 @@ tasks {
 
     assemble {
         dependsOn(reobfJar)
+    }
+
+    reobfJar {
+        outputJar = rootProject.layout.buildDirectory.file("jars/paper/${rootProject.name}-${rootProject.version}.jar")
     }
 
     processResources {

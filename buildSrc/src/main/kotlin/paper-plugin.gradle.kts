@@ -13,6 +13,8 @@ repositories {
 
     maven("https://repo.fancyplugins.de/releases/")
 
+    maven("https://repo.oraxen.com/releases/")
+
     flatDir { dirs("libs") }
 }
 
