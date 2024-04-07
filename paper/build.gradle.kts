@@ -20,8 +20,6 @@ dependencies {
 
     implementation(projects.api)
 
-    compileOnly(libs.bundles.holograms)
-
     compileOnly(libs.vault)
 
     compileOnly(fileTree("libs").include("*.jar"))
