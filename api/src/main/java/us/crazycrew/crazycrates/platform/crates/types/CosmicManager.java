@@ -1,7 +1,6 @@
 package us.crazycrew.crazycrates.platform.crates.types;
 
 import us.crazycrew.crazycrates.platform.crates.CrateConfig;
-
 import java.util.List;
 
 public abstract class CosmicManager extends AbstractCrateManager {
