@@ -21,6 +21,10 @@ repositories {
 
     maven("https://jitpack.io/")
 
+    flatDir { dirs("libs/compile") }
+
+    flatDir { dirs("libs/shade") }
+
     mavenCentral()
 }
 

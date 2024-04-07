@@ -8,9 +8,11 @@ plugins {
 }
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.bundle)
+    compileOnly(fileTree("$rootDir/libs/compile").include("*.jar"))
 
-    implementation(projects.vital.vitalPaper)
+    implementation(fileTree("$rootDir/libs/shade").include("*.jar"))
+
+    paperweight.paperDevBundle(libs.versions.bundle)
 
     implementation(libs.bundles.triumph)
 
@@ -21,8 +23,6 @@ dependencies {
     implementation(projects.api)
 
     compileOnly(libs.vault)
-
-    compileOnly(fileTree("libs").include("*.jar"))
 }
 
 tasks {

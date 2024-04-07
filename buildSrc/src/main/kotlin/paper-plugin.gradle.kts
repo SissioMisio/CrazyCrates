@@ -11,11 +11,7 @@ repositories {
 
     maven("https://repo.triumphteam.dev/snapshots/")
 
-    maven("https://repo.fancyplugins.de/releases/")
-
     maven("https://repo.oraxen.com/releases/")
-
-    flatDir { dirs("libs") }
 }
 
 project.version = if (System.getenv("BUILD_NUMBER") != null) "${rootProject.version}-${System.getenv("BUILD_NUMBER")}" else rootProject.version

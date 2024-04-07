@@ -12,9 +12,9 @@ base {
 }
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.bundle)
+    compileOnly(fileTree("libs/shade").include("*.jar"))
 
-    compileOnly(projects.vital.vitalPaper)
+    paperweight.paperDevBundle(libs.versions.bundle)
 
     compileOnly(libs.config.me)
 }
