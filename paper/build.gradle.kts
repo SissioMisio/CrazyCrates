@@ -51,7 +51,7 @@ tasks {
     }
 
     reobfJar {
-        outputJar = rootProject.layout.buildDirectory.file("jars/paper/${rootProject.name}-${rootProject.version}.jar")
+        outputJar = rootProject.layout.buildDirectory.file("$rootDir/jars/paper/${rootProject.name}-${rootProject.version}.jar")
     }
 
     processResources {
