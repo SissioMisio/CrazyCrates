@@ -1,6 +1,10 @@
 package com.badbones69.crazycrates.listeners.crates;
 
+import ch.jalu.configme.SettingsManager;
 import com.badbones69.crazycrates.CrazyCrates;
+import com.badbones69.crazycrates.api.events.KeyCheckEvent;
+import com.badbones69.crazycrates.api.objects.other.CrateLocation;
+import com.badbones69.crazycrates.api.utils.MiscUtils;
 import com.badbones69.crazycrates.tasks.BukkitUserManager;
 import com.badbones69.crazycrates.tasks.crates.CrateManager;
 import com.badbones69.crazycrates.api.enums.Messages;
@@ -8,6 +12,8 @@ import com.badbones69.crazycrates.api.events.CrateOpenEvent;
 import com.badbones69.crazycrates.api.objects.Crate;
 import com.ryderbelserion.vital.enums.Support;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +22,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
 import com.badbones69.crazycrates.api.utils.MsgUtils;
+import us.crazycrew.crazycrates.api.enums.types.KeyType;
+import us.crazycrew.crazycrates.platform.config.ConfigManager;
+import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
 import java.util.List;
 
 public class CrateOpenListener implements Listener {
@@ -26,6 +35,58 @@ public class CrateOpenListener implements Listener {
 
     private final @NotNull BukkitUserManager userManager = this.plugin.getUserManager();
 
+    private final @NotNull SettingsManager config = ConfigManager.getConfig();
+
+    @EventHandler
+    public void onKeyCheck(KeyCheckEvent event) {
+        CrateLocation location = event.getCrateLocation();
+        Player player = event.getPlayer();
+
+        if (location == null) {
+            event.setCancelled(true);
+
+            return;
+        }
+
+        Crate crate = location.getCrate();
+
+        if (crate == null || crate.getCrateType() == CrateType.menu) {
+            event.setCancelled(true);
+
+            return;
+        }
+
+        boolean lackingKey = true;
+        KeyType keyType = null;
+
+        if (this.config.getProperty(ConfigKeys.physical_accepts_virtual_keys)) {
+            lackingKey = this.userManager.getVirtualKeys(player.getUniqueId(), crate.getName()) >= 1;
+            keyType = KeyType.virtual_key;
+        } else {
+            if (this.config.getProperty(ConfigKeys.physical_accepts_physical_keys)) {
+                if (this.userManager.hasPhysicalKey(player.getUniqueId(), crate.getName(), false)) {
+                    keyType = KeyType.physical_key;
+                    lackingKey = false;
+                }
+            }
+        }
+
+        if (lackingKey) {
+            if (this.config.getProperty(ConfigKeys.need_key_sound_toggle)) {
+                player.playSound(player.getLocation(), Sound.valueOf(this.config.getProperty(ConfigKeys.need_key_sound)), SoundCategory.PLAYERS, 1f, 1f);
+            }
+
+            player.sendMessage(Messages.required_keys.getMessage("{crate}", crate.getName(), player));
+
+            event.setCancelled(true);
+
+            return;
+        }
+
+        event.setCancelled(lackingKey);
+        event.setKeyType(keyType);
+    }
+
     @EventHandler
     public void onCrateOpen(CrateOpenEvent event) {
         Player player = event.getPlayer();
@@ -34,6 +95,7 @@ public class CrateOpenListener implements Listener {
         if (crate.getCrateType() != CrateType.menu) {
             if (!crate.canWinPrizes(player)) {
                 player.sendMessage(Messages.no_prizes_found.getMessage("{crate}", crate.getName(), player));
+
                 this.crateManager.removePlayerFromOpeningList(player);
                 this.crateManager.removePlayerKeyType(player);
 
@@ -41,6 +103,20 @@ public class CrateOpenListener implements Listener {
 
                 return;
             }
+        }
+
+        for (String world : this.config.getProperty(ConfigKeys.disabled_worlds)) {
+            if (world.equalsIgnoreCase(player.getWorld().getName())) {
+                player.sendMessage(Messages.world_disabled.getMessage("{world}", player.getWorld().getName(), player));
+
+                return;
+            }
+        }
+
+        if (MiscUtils.isInventoryFull(player)) {
+            player.sendMessage(Messages.inventory_not_empty.getMessage("{crate}", crate.getName(), player));
+
+            return;
         }
 
         if (!player.hasPermission("crazycrates.open." + crate.getName()) || !player.hasPermission("crazycrates.open." + crate.getName().toLowerCase())) {

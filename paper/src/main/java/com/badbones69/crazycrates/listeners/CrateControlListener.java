@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -21,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
 import us.crazycrew.crazycrates.api.enums.types.KeyType;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
@@ -62,16 +62,6 @@ public class CrateControlListener implements Listener {
 
         if (crateLocation == null) return;
 
-        boolean isKey = event.getHand() == EquipmentSlot.OFF_HAND ? this.crateManager.isKey(player.getInventory().getItemInOffHand()) : this.crateManager.isKey(player.getInventory().getItemInMainHand());
-
-        if (isKey) {
-            event.setCancelled(true);
-
-            player.updateInventory();
-
-            return;
-        }
-
         event.setCancelled(true);
 
         if (player.getGameMode() == GameMode.CREATIVE && player.isSneaking() && player.hasPermission("crazycrates.admin")) {
@@ -84,13 +74,13 @@ public class CrateControlListener implements Listener {
             return;
         }
 
-        if (crateLocation.getCrateType() == CrateType.menu) return;
-
         Crate crate = crateLocation.getCrate();
+
+        if (crate.getCrateType() == CrateType.menu) return;
 
         if (crate.isPreviewEnabled()) {
             this.inventoryManager.addViewer(player);
-            this.inventoryManager.openNewCratePreview(player, crateLocation.getCrate());
+            this.inventoryManager.openNewCratePreview(player, crate);
         } else {
             player.sendMessage(Messages.preview_disabled.getMessage("{crate}", crate.getName(), player));
         }
@@ -111,40 +101,14 @@ public class CrateControlListener implements Listener {
 
         CrateLocation crateLocation = this.crateManager.getCrateLocation(clickedBlock.getLocation());
 
-        // If location is null, return.
-        if (crateLocation == null) return;
-
         Crate crate = crateLocation.getCrate();
 
-        // If crate is null, return.
-        if (crate == null) return;
+        KeyCheckEvent keys = new KeyCheckEvent(player, crateLocation);
+        this.plugin.getServer().getPluginManager().callEvent(keys);
+
+        if (keys.isCancelled()) return;
 
         boolean isKey = event.getHand() == EquipmentSlot.OFF_HAND ? ItemUtils.isSimilar(player.getInventory().getItemInOffHand(), crate) : ItemUtils.isSimilar(player.getInventory().getItemInMainHand(), crate);
-
-        if (isKey) {
-            event.setCancelled(true);
-            player.updateInventory();
-        }
-
-        event.setCancelled(true);
-
-        if (crate.getCrateType() == CrateType.menu) {
-            // this is to stop players in QuadCrate to not be able to try and open a crate set to menu.
-            if (!this.crateManager.isInOpeningList(player) && this.config.getProperty(ConfigKeys.enable_crate_menu)) {
-                CrateMainMenu crateMainMenu = new CrateMainMenu(player, this.config.getProperty(ConfigKeys.inventory_size), this.config.getProperty(ConfigKeys.inventory_name));
-
-                player.openInventory(crateMainMenu.build().getInventory());
-            } else {
-                player.sendMessage(Messages.feature_disabled.getMessage(player));
-            }
-
-            return;
-        }
-
-        KeyCheckEvent keyCheckEvent = new KeyCheckEvent(player, crateLocation);
-        player.getServer().getPluginManager().callEvent(keyCheckEvent);
-
-        if (keyCheckEvent.isCancelled()) return;
 
         boolean hasKey = false;
         boolean isPhysical = false;
@@ -158,6 +122,7 @@ public class CrateControlListener implements Listener {
 
         if (requiredKeys > 0 && totalKeys < requiredKeys) {
             Map<String, String> placeholders = new HashMap<>();
+
             placeholders.put("{key_amount}", String.valueOf(requiredKeys));
             placeholders.put("{crate}", crate.getPreviewName());
             placeholders.put("{amount}", String.valueOf(totalKeys));

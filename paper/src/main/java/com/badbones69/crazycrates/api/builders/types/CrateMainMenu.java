@@ -207,6 +207,7 @@ public class CrateMainMenu extends InventoryBuilder {
 
             if (this.crateManager.isInOpeningList(player)) {
                 player.sendMessage(Messages.already_opening_crate.getMessage("{crate}", crate.getName(), player));
+
                 return;
             }
 
@@ -228,18 +229,21 @@ public class CrateMainMenu extends InventoryBuilder {
                 }
 
                 player.sendMessage(Messages.no_virtual_key.getMessage("{crate}", crate.getName(), player));
+
                 return;
             }
 
             for (String world : this.config.getProperty(ConfigKeys.disabled_worlds)) {
                 if (world.equalsIgnoreCase(player.getWorld().getName())) {
                     player.sendMessage(Messages.world_disabled.getMessage("{world}", player.getWorld().getName(), player));
+
                     return;
                 }
             }
 
             if (MiscUtils.isInventoryFull(player)) {
                 player.sendMessage(Messages.inventory_not_empty.getMessage("{crate}", crate.getName(), player));
+
                 return;
             }
 

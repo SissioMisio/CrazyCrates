@@ -6,13 +6,16 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazycrates.api.enums.types.KeyType;
 
 public class KeyCheckEvent extends Event implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
+
     private final Player player;
     private final CrateLocation crateLocation;
     private boolean isCancelled;
+    private KeyType type;
     
     /**
      * Used to be able to disabled CrazyCrates CrateControl.onCrateOpen# event listener to be able to implement a custom one.
@@ -51,5 +54,13 @@ public class KeyCheckEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean isCancelled) {
         this.isCancelled = isCancelled;
+    }
+
+    public void setKeyType(KeyType type) {
+        this.type = type;
+    }
+
+    public KeyType getKeyType() {
+        return this.type;
     }
 }
