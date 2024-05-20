@@ -7,7 +7,7 @@ import com.badbones69.crazycrates.api.objects.Prize;
 import com.badbones69.crazycrates.api.PrizeManager;
 import com.badbones69.crazycrates.tasks.BukkitUserManager;
 import com.badbones69.crazycrates.tasks.InventoryManager;
-import com.ryderbelserion.vital.files.FileManager;
+import com.ryderbelserion.vital.core.config.YamlManager;
 import dev.triumphteam.cmd.core.annotation.ArgName;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
@@ -22,6 +22,7 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.simpleyaml.configuration.file.FileConfiguration;
 import us.crazycrew.crazycrates.api.enums.Files;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
@@ -34,7 +35,6 @@ import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
@@ -65,7 +65,7 @@ public class CrateBaseCommand extends BaseCommand {
 
     private final @NotNull CrateManager crateManager = this.plugin.getCrateManager();
 
-    private final @NotNull FileManager fileManager = this.plugin.getFileManager();
+    private final @NotNull YamlManager fileManager = this.plugin.getFileManager();
 
     private final @NotNull SettingsManager config = ConfigManager.getConfig();
 
@@ -145,7 +145,8 @@ public class CrateBaseCommand extends BaseCommand {
     public void onReload(CommandSender sender) {
         ConfigManager.reload();
 
-        this.fileManager.create();
+        this.fileManager.reloadCustomFiles();
+        this.fileManager.reloadFiles();
 
         FileConfiguration locations = Files.locations.getFile();
         FileConfiguration data = Files.data.getFile();

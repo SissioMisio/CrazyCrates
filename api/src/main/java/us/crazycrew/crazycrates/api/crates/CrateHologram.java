@@ -1,8 +1,5 @@
 package us.crazycrew.crazycrates.api.crates;
 
-import com.ryderbelserion.vital.util.DyeUtil;
-import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
 import java.util.ArrayList;
 import java.util.List;
 

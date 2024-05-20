@@ -5,19 +5,20 @@ import com.badbones69.crazycrates.api.builders.types.CrateTierMenu;
 import com.badbones69.crazycrates.api.enums.PersistentKeys;
 import com.badbones69.crazycrates.tasks.BukkitUserManager;
 import com.badbones69.crazycrates.tasks.crates.effects.SoundEffect;
-import com.ryderbelserion.vital.files.FileManager;
-import com.ryderbelserion.vital.util.DyeUtil;
+import com.ryderbelserion.vital.core.config.YamlManager;
+import com.ryderbelserion.vital.paper.util.DyeUtil;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Registry;
 import org.bukkit.SoundCategory;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.file.FileConfiguration;
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
 import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.tasks.crates.other.CosmicCrateManager;
@@ -26,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.api.crates.CrateHologram;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -80,7 +80,7 @@ public class Crate {
 
     private final @NotNull InventoryManager inventoryManager = this.plugin.getInventoryManager();
 
-    private final @NotNull FileManager fileManager = this.plugin.getFileManager();
+    private final @NotNull YamlManager fileManager = this.plugin.getFileManager();
 
     private int maxMassOpen;
     private int requiredKeys;

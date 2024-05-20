@@ -21,9 +21,9 @@ import com.badbones69.crazycrates.support.placeholders.PlaceholderAPISupport;
 import com.badbones69.crazycrates.tasks.BukkitUserManager;
 import com.badbones69.crazycrates.tasks.InventoryManager;
 import com.badbones69.crazycrates.tasks.crates.CrateManager;
-import com.ryderbelserion.vital.VitalPaper;
-import com.ryderbelserion.vital.enums.Support;
-import com.ryderbelserion.vital.files.FileManager;
+import com.ryderbelserion.vital.core.config.YamlManager;
+import com.ryderbelserion.vital.paper.VitalPaper;
+import com.ryderbelserion.vital.paper.enums.Support;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.platform.Server;
@@ -159,7 +159,7 @@ public class CrazyCrates extends JavaPlugin {
         return this.crateManager;
     }
 
-    public @NotNull FileManager getFileManager() {
+    public @NotNull YamlManager getFileManager() {
         return this.instance.getFileManager();
     }
 

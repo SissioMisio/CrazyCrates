@@ -2,10 +2,9 @@ package com.badbones69.crazycrates.api.enums;
 
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.properties.Property;
-import com.ryderbelserion.vital.common.util.StringUtil;
-import com.ryderbelserion.vital.enums.Support;
+import com.ryderbelserion.vital.core.util.StringUtil;
+import com.ryderbelserion.vital.paper.enums.Support;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import us.crazycrew.crazycrates.platform.config.impl.messages.CommandKeys;

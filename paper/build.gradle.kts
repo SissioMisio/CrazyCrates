@@ -15,13 +15,9 @@ dependencies {
 
     implementation(project(":api"))
 
-    implementation(libs.vital)
-
-    compileOnly(libs.triumph.cmds)
-
-    compileOnly(libs.config.me)
-
-    //compileOnly(libs.metrics)
+    implementation(libs.vital.paper) {
+        exclude("ch.jalu")
+    }
 
     compileOnly(libs.head.database.api)
 
@@ -33,7 +29,11 @@ dependencies {
 
     compileOnly(libs.itemsadder.api)
 
+    compileOnly(libs.triumph.cmds)
+
     compileOnly(libs.oraxen.api)
+
+    compileOnly(libs.config.me)
 }
 
 tasks {

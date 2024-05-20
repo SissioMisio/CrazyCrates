@@ -12,18 +12,19 @@ import com.badbones69.crazycrates.tasks.InventoryManager;
 import com.badbones69.crazycrates.tasks.crates.types.*;
 import com.badbones69.crazycrates.tasks.crates.types.CasinoCrate;
 import com.badbones69.crazycrates.tasks.crates.types.CsgoCrate;
-import com.ryderbelserion.vital.common.util.FileUtil;
-import com.ryderbelserion.vital.enums.Support;
-import com.ryderbelserion.vital.files.FileManager;
+import com.ryderbelserion.vital.core.config.YamlFile;
+import com.ryderbelserion.vital.core.config.YamlManager;
+import com.ryderbelserion.vital.core.util.FileUtil;
+import com.ryderbelserion.vital.paper.enums.Support;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Color;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.file.FileConfiguration;
 import us.crazycrew.crazycrates.api.enums.Files;
 import us.crazycrew.crazycrates.api.enums.types.CrateType;
 import us.crazycrew.crazycrates.api.enums.types.KeyType;
@@ -40,7 +41,6 @@ import com.badbones69.crazycrates.api.objects.Tier;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -69,7 +69,7 @@ public class CrateManager {
     private final @NotNull CrazyCrates plugin = JavaPlugin.getPlugin(CrazyCrates.class);
     private final @NotNull InventoryManager inventoryManager = this.plugin.getInventoryManager();
 
-    private final @NotNull FileManager fileManager = this.plugin.getFileManager();
+    private final @NotNull YamlManager fileManager = this.plugin.getFileManager();
 
     private final List<CrateLocation> crateLocations = new ArrayList<>();
     private final List<CrateSchematic> crateSchematics = new ArrayList<>();
@@ -235,7 +235,7 @@ public class CrateManager {
 
         for (String crateName : getCrateNames()) {
             try {
-                FileConfiguration file = this.fileManager.getCustomFile(crateName).getConfiguration();
+                YamlFile file = this.fileManager.getCustomFile(crateName).getYamlFile();
 
                 CrateType crateType = CrateType.getFromName(file.getString("Crate.CrateType"));
 

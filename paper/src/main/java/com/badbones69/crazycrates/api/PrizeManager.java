@@ -2,8 +2,8 @@ package com.badbones69.crazycrates.api;
 
 import com.badbones69.crazycrates.api.objects.Tier;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
-import com.ryderbelserion.vital.enums.Support;
-import com.ryderbelserion.vital.util.MiscUtil;
+import com.ryderbelserion.vital.paper.enums.Support;
+import com.ryderbelserion.vital.paper.util.MiscUtil;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.commons.lang.WordUtils;
 import com.badbones69.crazycrates.CrazyCrates;

@@ -8,15 +8,15 @@ project.group = "us.crazycrew.crazycrates"
 project.version = "1.0-snapshot"
 
 repositories {
-    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
 
-    compileOnly(libs.config.me)
+    compileOnlyApi(libs.vital.core)
 
-    compileOnly(libs.vital)
+    compileOnly(libs.config.me)
 }
 
 java {
