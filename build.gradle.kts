@@ -13,7 +13,7 @@ plugins {
 
 val buildNumber: String? = System.getenv("NEXT_BUILD_NUMBER")
 
-rootProject.version = if (buildNumber != null) "2.1.1-$buildNumber" else "2.1.2"
+rootProject.version = if (buildNumber != null) "2.1.2-$buildNumber" else "2.1.2"
 
 val isSnapshot = false
 
@@ -43,7 +43,6 @@ modrinth {
 
     gameVersions.set(listOf(
         "1.20.4"
-        //"1.20.5"
     ))
 
     loaders.add("paper")
@@ -76,7 +75,6 @@ hangarPublish {
 
                 platformVersions.set(listOf(
                     "1.20.4"
-                    //"1.20.5"
                 ))
 
                 dependencies {
