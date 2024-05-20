@@ -17,7 +17,6 @@ import com.ryderbelserion.vital.core.config.YamlManager;
 import com.ryderbelserion.vital.core.util.FileUtil;
 import com.ryderbelserion.vital.paper.enums.Support;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -125,7 +124,9 @@ public class CrateManager {
                             boolean isEnabled = alternativeSection.getBoolean("Toggle");
 
                             if (isEnabled) {
-                                alternativePrize = new Prize(prizeSection.getString("DisplayName", WordUtils.capitalizeFully(prizeSection.getString("DisplayItem", "STONE").replaceAll("_", " "))), prizeSection.getName(), alternativeSection);
+                                Material material = Material.valueOf(prizeSection.getString("DisplayItem", "STONE"));
+
+                                alternativePrize = new Prize(material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">", prizeSection.getName(), alternativeSection);
                             }
                         }
 
@@ -295,7 +296,9 @@ public class CrateManager {
                                 boolean isEnabled = alternativeSection.getBoolean("Toggle");
 
                                 if (isEnabled) {
-                                    alternativePrize = new Prize(prizeSection.getString("DisplayName", WordUtils.capitalizeFully(prizeSection.getString("DisplayItem", "STONE").replaceAll("_", " "))), prizeSection.getName(), alternativeSection);
+                                    Material material = Material.valueOf(prizeSection.getString("DisplayItem", "STONE"));
+
+                                    alternativePrize = new Prize(material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">", prizeSection.getName(), alternativeSection);
                                 }
                             }
 

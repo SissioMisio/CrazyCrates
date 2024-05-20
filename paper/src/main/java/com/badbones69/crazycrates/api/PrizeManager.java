@@ -5,13 +5,13 @@ import com.badbones69.crazycrates.api.builders.ItemBuilder;
 import com.ryderbelserion.vital.paper.enums.Support;
 import com.ryderbelserion.vital.paper.util.MiscUtil;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.apache.commons.lang.WordUtils;
 import com.badbones69.crazycrates.CrazyCrates;
 import com.badbones69.crazycrates.api.events.PlayerPrizeEvent;
 import com.badbones69.crazycrates.api.objects.Crate;
 import com.badbones69.crazycrates.api.objects.Prize;
 import com.badbones69.crazycrates.api.enums.Messages;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -139,9 +139,13 @@ public class PrizeManager {
 
         if (Support.placeholder_api.isEnabled() ) command = PlaceholderAPI.setPlaceholders(player, command);
 
-        String display = prize.getDisplayItemBuilder().getName();
+        ItemBuilder display = prize.getDisplayItemBuilder();
 
-        String name = display == null || display.isEmpty() ? WordUtils.capitalizeFully(prize.getDisplayItemBuilder().getMaterial().getKey().getKey().replaceAll("_", " ")) : display;
+        String displayName = display.getName();
+
+        Material material = display.getMaterial();
+
+        String name = displayName == null || displayName.isEmpty() ? material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">" : displayName;
 
         MiscUtils.sendCommand(command
                 .replaceAll("%player%", quoteReplacement(player.getName()))
@@ -151,9 +155,13 @@ public class PrizeManager {
     }
 
     private static void sendMessage(Player player, Prize prize, Crate crate, String message) {
-        String display = prize.getDisplayItemBuilder().getName();
+        ItemBuilder display = prize.getDisplayItemBuilder();
 
-        String name = display == null || display.isEmpty() ? WordUtils.capitalizeFully(prize.getDisplayItemBuilder().getMaterial().getKey().getKey().replaceAll("_", " ")) : display;
+        String displayName = display.getName();
+
+        Material material = display.getMaterial();
+
+        String name = displayName == null || displayName.isEmpty() ? material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">" : displayName;
 
         String defaultMessage = message
                 .replaceAll("%player%", quoteReplacement(player.getName()))

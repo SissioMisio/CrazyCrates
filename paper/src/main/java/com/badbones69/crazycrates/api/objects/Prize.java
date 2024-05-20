@@ -3,7 +3,6 @@ package com.badbones69.crazycrates.api.objects;
 import com.badbones69.crazycrates.api.enums.PersistentKeys;
 import com.badbones69.crazycrates.api.builders.ItemBuilder;
 import com.badbones69.crazycrates.api.utils.MiscUtils;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -61,7 +60,9 @@ public class Prize {
 
         this.alternativePrize = alternativePrize;
 
-        this.prizeName = section.getString("DisplayName", WordUtils.capitalizeFully(section.getString("DisplayItem", "STONE").replaceAll("_", " ")));
+        Material material = new ItemBuilder().setMaterial(section.getString("DisplayItem", "STONE")).getMaterial();
+
+        this.prizeName = section.getString("DisplayName", material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">");
         this.maxRange = section.getInt("MaxRange", 100);
         this.chance = section.getInt("Chance", 50);
         this.firework = section.getBoolean("Firework", false);

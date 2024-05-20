@@ -13,7 +13,6 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
@@ -174,7 +173,7 @@ public class ItemBuilder {
         if (!itemBuilder.displayName.isBlank()) {
             this.displayName = itemBuilder.displayName;
         } else {
-            this.displayName = WordUtils.capitalizeFully(this.material.getKey().getKey().replaceAll("_", " "));
+            this.displayName = material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">";
         }
 
         this.displayLore = itemBuilder.displayLore;
@@ -727,7 +726,7 @@ public class ItemBuilder {
         if (!itemName.isBlank()) {
             this.displayName = itemName;
         } else {
-            this.displayName = WordUtils.capitalizeFully(this.material.getKey().getKey().replaceAll("_", " "));
+            this.displayName = material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">";
         }
 
         return this;
