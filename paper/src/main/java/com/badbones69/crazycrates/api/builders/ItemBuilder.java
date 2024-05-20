@@ -726,7 +726,7 @@ public class ItemBuilder {
         if (!itemName.isBlank()) {
             this.displayName = itemName;
         } else {
-            this.displayName = material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">";
+            this.displayName = this.material.isBlock() ? "<lang:" + this.material.getBlockTranslationKey() + ">" : "<lang:" + this.material.getItemTranslationKey() + ">";
         }
 
         return this;

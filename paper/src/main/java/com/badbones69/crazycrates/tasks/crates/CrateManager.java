@@ -124,9 +124,15 @@ public class CrateManager {
                             boolean isEnabled = alternativeSection.getBoolean("Toggle");
 
                             if (isEnabled) {
-                                Material material = Material.valueOf(prizeSection.getString("DisplayItem", "STONE"));
+                                String materialName = prizeSection.getString("DisplayItem", "STONE");
 
-                                alternativePrize = new Prize(material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">", prizeSection.getName(), alternativeSection);
+                                Material material = Material.matchMaterial(materialName);
+
+                                if (material != null) {
+                                    alternativePrize = new Prize(material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">", prizeSection.getName(), alternativeSection);
+                                } else {
+                                    if (MiscUtils.isLogging()) this.plugin.getLogger().warning("The material: " + materialName + " is not a valid material.");
+                                }
                             }
                         }
 
@@ -296,9 +302,15 @@ public class CrateManager {
                                 boolean isEnabled = alternativeSection.getBoolean("Toggle");
 
                                 if (isEnabled) {
-                                    Material material = Material.valueOf(prizeSection.getString("DisplayItem", "STONE"));
+                                    String materialName = prizeSection.getString("DisplayItem", "STONE");
 
-                                    alternativePrize = new Prize(material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">", prizeSection.getName(), alternativeSection);
+                                    Material material = Material.matchMaterial(materialName);
+
+                                    if (material != null) {
+                                        alternativePrize = new Prize(material.isBlock() ? "<lang:" + material.getBlockTranslationKey() + ">" : "<lang:" + material.getItemTranslationKey() + ">", prizeSection.getName(), alternativeSection);
+                                    } else {
+                                        if (MiscUtils.isLogging()) this.plugin.getLogger().warning("The material: " + materialName + " is not a valid material.");
+                                    }
                                 }
                             }
 
