@@ -144,7 +144,7 @@ command:
       no-virtual-keys: "{prefix}<bold><dark_gray>(<dark_red>!<dark_gray>)</bold> <gray>The player {player} does not have any keys."
       # A list of available placeholders: {player}, {crates_opened}
       virtual-keys-header:
-        - "<bold><dark_gray>(<gold>!<dark_gray>)</bold> <gray>List of {player}""s current number of keys."
+        - "<bold><dark_gray>(<gold>!<dark_gray>)</bold> <gray>List of {player}'s current number of keys."
         - " <yellow> -> Total Crates Opened: <red>{crates_opened}"
         - ""
     # A list of available placeholders: {crate}, {keys}, {crate_opened}
