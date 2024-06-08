@@ -11,11 +11,19 @@ plugins {
     `java-library`
 }
 
+feather {
+    repository("https://repo.codemc.io/repository/maven-public")
+
+    //repository(Repository.CrazyCrewReleases.url)
+
+    repository(Repository.Jitpack.url)
+}
+
 repositories {
     flatDir { dirs("libs") }
 
     mavenCentral()
-    //mavenLocal()
+    mavenLocal()
 }
 
 dependencies {
@@ -41,12 +49,4 @@ tasks {
     processResources {
         filteringCharset = Charsets.UTF_8.name()
     }
-}
-
-feather {
-    repository("https://repo.codemc.io/repository/maven-public")
-
-    repository(Repository.CrazyCrewReleases.url)
-
-    repository(Repository.Jitpack.url)
 }

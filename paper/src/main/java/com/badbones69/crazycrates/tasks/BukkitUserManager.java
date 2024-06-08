@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.api.users.UserManager;
 import com.badbones69.crazycrates.api.enums.Messages;
 import com.badbones69.crazycrates.api.utils.MiscUtils;
+
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 public class BukkitUserManager extends UserManager {
@@ -41,9 +44,28 @@ public class BukkitUserManager extends UserManager {
     private @NotNull final CustomFiles data = CustomFiles.data;
     private @NotNull final YamlFile configuration = data.getYamlFile();
 
+    private @NotNull final Map<UUID, YamlFile> configurations = new ConcurrentHashMap<>();
+
     @Override
     public Player getUser(@NotNull final UUID uuid) {
         return this.plugin.getServer().getPlayer(uuid);
+    }
+
+    @Override
+    public void createUser(@NotNull UUID uuid) {
+        if (isPlayerNull(uuid)) {
+            if (MiscUtils.isLogging()) this.plugin.getLogger().warning("Player with the uuid: " + uuid + " is null.");
+
+            return;
+        }
+
+        final File userFolder = new File(this.plugin.getDataFolder(), "users");
+
+        if (!userFolder.exists()) userFolder.mkdirs();
+
+        final File user = new File(userFolder, uuid + ".yml");
+
+        if (!user.exists()) user.mkdirs();
     }
 
     @Override
