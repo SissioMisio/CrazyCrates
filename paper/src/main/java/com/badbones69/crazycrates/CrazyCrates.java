@@ -24,11 +24,18 @@ import com.badbones69.crazycrates.tasks.crates.CrateManager;
 import com.ryderbelserion.vital.core.config.YamlManager;
 import com.ryderbelserion.vital.paper.VitalPaper;
 import com.ryderbelserion.vital.paper.enums.Support;
+import net.minecraft.world.item.ItemStack;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.platform.Server;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import static com.badbones69.crazycrates.api.utils.MiscUtils.registerPermissions;
@@ -51,6 +58,44 @@ public class CrazyCrates extends JavaPlugin {
     @Override
     public void onLoad() {
         this.instance = new Server(this);
+
+        Arrays.stream(this.instance.getCrateFiles()).toList().forEach(file -> {
+            final FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+            ConfigurationSection section = configuration.getConfigurationSection("Crate.Prizes");
+
+            if (section != null) {
+                section.getKeys(false).forEach(key -> {
+                    List<?> editorItems = section.getList(key + ".Editor-Items");
+
+                    if (editorItems != null) {
+                        editorItems.forEach(item -> {
+                            final org.bukkit.inventory.ItemStack itemStack = (org.bukkit.inventory.ItemStack) item;
+
+                            final ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+
+                            final String tag = nmsItem.getOrCreateTag().getAsString();
+
+                            if (!tag.isEmpty()) {
+                                configuration.set("Crate.Prizes." + key + ".DisplayNbt", tag);
+                            }
+
+                            configuration.set("Crate.Prizes." + key + ".DisplayItem", itemStack.getType().name());
+                            configuration.set("Crate.Prizes." + key + ".DisplayAmount", itemStack.getAmount());
+                        });
+
+                        configuration.set("Crate.Prizes." + key + ".Editor-Items", null);
+
+                        try {
+                            configuration.save(file);
+                        } catch (IOException e) {
+                            getLogger().warning("Failed to migrate editor-items " + file.getName());
+                        }
+                    }
+                });
+            }
+        });
+
         this.instance.enable();
     }
 

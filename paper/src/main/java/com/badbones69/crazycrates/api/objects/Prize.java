@@ -46,14 +46,6 @@ public class Prize {
 
         this.crateName = crateName;
 
-        List<?> list = section.getList("Editor-Items");
-
-        if (list != null) {
-            for (Object key : list) {
-                this.items.add((ItemStack) key);
-            }
-        }
-
         this.builders = ItemBuilder.convertStringList(this.section.getStringList("Items"), this.prizeNumber);
 
         this.tiers = tierPrizes;
