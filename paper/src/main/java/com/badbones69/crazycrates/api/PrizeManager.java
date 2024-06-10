@@ -203,11 +203,13 @@ public class PrizeManager {
 
     public static Tier getTier(Crate crate) {
         if (crate.getTiers() != null && !crate.getTiers().isEmpty()) {
+            final Random random = MiscUtils.useOtherRandom() ? ThreadLocalRandom.current() : new Random();
+
             for (int stopLoop = 0; stopLoop <= 100; stopLoop++) {
                 for (Tier tier : crate.getTiers()) {
                     int chance = tier.getChance();
 
-                    int num = MiscUtils.useOtherRandom() ? ThreadLocalRandom.current().nextInt(tier.getMaxRange()) : new Random().nextInt(tier.getMaxRange());
+                    final int num = random.nextInt(tier.getMaxRange());
 
                     if (num >= 1 && num <= chance) {
                         return tier;

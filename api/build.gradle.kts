@@ -14,7 +14,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
 
-    compileOnlyApi(libs.vital.core)
+    compileOnly(libs.vital.core)
 
     compileOnly(libs.config.me)
 }

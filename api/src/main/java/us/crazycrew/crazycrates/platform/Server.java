@@ -1,6 +1,6 @@
 package us.crazycrew.crazycrates.platform;
 
-import com.ryderbelserion.vital.core.AbstractPlugin;
+import com.ryderbelserion.vital.core.Vital;
 import com.ryderbelserion.vital.core.config.YamlManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -10,10 +10,12 @@ import us.crazycrew.crazycrates.api.CrazyCratesService;
 import us.crazycrew.crazycrates.api.ICrazyCrates;
 import us.crazycrew.crazycrates.api.users.UserManager;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
+import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
+
 import java.io.File;
 import java.util.logging.Logger;
 
-public class Server extends AbstractPlugin implements ICrazyCrates {
+public class Server extends Vital implements ICrazyCrates {
 
     private YamlManager fileManager;
     private final JavaPlugin plugin;
@@ -26,15 +28,19 @@ public class Server extends AbstractPlugin implements ICrazyCrates {
         this.crateFolder = new File(this.plugin.getDataFolder(), "crates");
     }
 
+    private boolean isLogging = false;
+
     @ApiStatus.Internal
     public void enable() {
         ConfigManager.load(this.plugin.getDataFolder());
-      
+
+        this.isLogging = ConfigManager.getConfig().getProperty(ConfigKeys.verbose_logging);
+
         this.fileManager = new YamlManager();
-        this.fileManager.addFile("locations.yml")
-                .addFile("data.yml")
+        this.fileManager.addFile("locations.yml").addFile("data.yml")
                 .addFolder("crates")
-                .addFolder("schematics").init();
+                .addFolder("schematics")
+                .init();
 
         // Register legacy provider.
         CrazyCratesService.register(this);
@@ -64,6 +70,11 @@ public class Server extends AbstractPlugin implements ICrazyCrates {
     @Override
     public @NotNull Logger getLogger() {
         return this.plugin.getLogger();
+    }
+
+    @Override
+    public boolean isLogging() {
+        return this.isLogging;
     }
 
     public @NotNull YamlManager getFileManager() {

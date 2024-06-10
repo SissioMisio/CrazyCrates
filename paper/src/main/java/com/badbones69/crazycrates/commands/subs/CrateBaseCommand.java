@@ -145,7 +145,7 @@ public class CrateBaseCommand extends BaseCommand {
     public void onReload(CommandSender sender) {
         ConfigManager.reload();
 
-        this.fileManager.reloadCustomFiles();
+        this.fileManager.init();
         this.fileManager.reloadFiles();
 
         FileConfiguration locations = Files.locations.getFile();
