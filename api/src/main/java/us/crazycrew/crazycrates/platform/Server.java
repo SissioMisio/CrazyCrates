@@ -24,6 +24,8 @@ public class Server extends Vital implements ICrazyCrates {
     public Server(JavaPlugin plugin) {
         this.plugin = plugin;
 
+        this.plugin.getDataFolder().mkdirs();
+
         this.crateFolder = new File(this.plugin.getDataFolder(), "crates");
     }
 
@@ -80,7 +82,7 @@ public class Server extends Vital implements ICrazyCrates {
         return this.fileManager;
     }
 
-    public @NotNull File getCrateFolder() {
+    public File getCrateFolder() {
         return this.crateFolder;
     }
 

@@ -34,7 +34,10 @@ import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazycrates.platform.Server;
 import us.crazycrew.crazycrates.platform.config.ConfigManager;
 import us.crazycrew.crazycrates.platform.config.impl.ConfigKeys;
+
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
@@ -59,42 +62,60 @@ public class CrazyCrates extends JavaPlugin {
     public void onLoad() {
         this.instance = new Server(this);
 
-        Arrays.stream(this.instance.getCrateFiles()).toList().forEach(file -> {
-            final FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+        if (this.instance.getCrateFolder() != null) {
+            final List<@NotNull File> files = Arrays.stream(this.instance.getCrateFiles()).toList();
 
-            ConfigurationSection section = configuration.getConfigurationSection("Crate.Prizes");
+            if (!files.isEmpty()) {
+                files.forEach(file -> {
+                    final FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
-            if (section != null) {
-                section.getKeys(false).forEach(key -> {
-                    List<?> editorItems = section.getList(key + ".Editor-Items");
+                    ConfigurationSection section = configuration.getConfigurationSection("Crate.Prizes");
 
-                    if (editorItems != null) {
-                        editorItems.forEach(item -> {
-                            final org.bukkit.inventory.ItemStack itemStack = (org.bukkit.inventory.ItemStack) item;
+                    if (section != null) {
+                        section.getKeys(false).forEach(key -> {
+                            final List<?> editorItems = section.getList(key + ".Editor-Items");
 
-                            final ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+                            if (editorItems != null) {
+                                editorItems.forEach(item -> {
+                                    final org.bukkit.inventory.ItemStack itemStack = (org.bukkit.inventory.ItemStack) item;
 
-                            final String tag = nmsItem.getOrCreateTag().getAsString();
+                                    final ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
 
-                            if (!tag.isEmpty()) {
-                                configuration.set("Crate.Prizes." + key + ".DisplayNbt", tag);
+                                    final String tag = nmsItem.getOrCreateTag().getAsString();
+
+                                    if (!tag.isEmpty()) {
+                                        configuration.set("Crate.Prizes." + key + ".DisplayNbt", tag);
+                                    }
+
+                                    configuration.set("Crate.Prizes." + key + ".DisplayItem", itemStack.getType().name());
+                                    configuration.set("Crate.Prizes." + key + ".DisplayAmount", itemStack.getAmount());
+
+                                    /*if (configuration.contains("Crate.Prizes." + key + ".Items")) {
+                                        List<String> items = new ArrayList<>(configuration.getStringList("Crate.Prizes." + key + ".Items"));
+
+                                        items.add("Item:" + itemStack.getType().name() + ", Amount:" + itemStack.getAmount() + ", Nbt:" + tag);
+
+                                        configuration.set("Crate.Prizes." + key + ".Items", items);
+                                    } else {
+                                        configuration.set("Crate.Prizes." + key + ".Items", List.of(
+                                                "Item:" + itemStack.getType().name() + ", Amount:" + itemStack.getAmount() + ", Nbt:" + tag
+                                        ));
+                                    }*/
+                                });
+
+                                configuration.set("Crate.Prizes." + key + ".Editor-Items", null);
+
+                                try {
+                                    configuration.save(file);
+                                } catch (IOException e) {
+                                    getLogger().warning("Failed to migrate editor-items " + file.getName());
+                                }
                             }
-
-                            configuration.set("Crate.Prizes." + key + ".DisplayItem", itemStack.getType().name());
-                            configuration.set("Crate.Prizes." + key + ".DisplayAmount", itemStack.getAmount());
                         });
-
-                        configuration.set("Crate.Prizes." + key + ".Editor-Items", null);
-
-                        try {
-                            configuration.save(file);
-                        } catch (IOException e) {
-                            getLogger().warning("Failed to migrate editor-items " + file.getName());
-                        }
                     }
                 });
             }
-        });
+        }
 
         this.instance.enable();
     }
