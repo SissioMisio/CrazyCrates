@@ -1149,6 +1149,9 @@ public class ItemBuilder {
                             itemBuilder.setAmount(1);
                         }
                     }
+                    case "nbt" -> {
+                        itemBuilder.setTag(value);
+                    }
                     case "damage" -> {
                         try {
                             itemBuilder.setDamage(Integer.parseInt(value));

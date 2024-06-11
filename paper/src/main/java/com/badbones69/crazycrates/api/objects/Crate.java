@@ -604,6 +604,18 @@ public class Crate {
 
         if (!tag.isEmpty()) {
             this.file.set(path + ".DisplayNbt", tag);
+
+            /*if (this.file.contains(path + ".Items")) {
+                List<String> items = new ArrayList<>(this.file.getStringList(path + ".Items"));
+
+                items.add("Item:" + item.getType().name() + ", Amount:" + item.getAmount() + ", Nbt:" + tag);
+
+                this.file.set(path + ".Items", items);
+            } else {
+                this.file.set(path + ".Items", List.of(
+                        "Item:" + item.getType().name() + ", Amount:" + item.getAmount() + ", Nbt:" + tag
+                ));
+            }*/
         }
 
         this.file.set(path + ".DisplayItem", item.getType().name());
