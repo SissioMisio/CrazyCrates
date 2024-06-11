@@ -19,8 +19,6 @@ import java.util.List;
 
 public class Prize {
 
-    private final List<ItemStack> items = new ArrayList<>();
-
     private List<String> permissions = new ArrayList<>();
     private ItemBuilder displayItem = new ItemBuilder();
     private ItemBuilder prizeItem = new ItemBuilder();
@@ -160,13 +158,6 @@ public class Prize {
      */
     public List<String> getCommands() {
         return this.commands;
-    }
-    
-    /**
-     * @return the Editor ItemStacks that are given to the player that wins.
-     */
-    public List<ItemStack> getItems() {
-        return this.items;
     }
     
     /**

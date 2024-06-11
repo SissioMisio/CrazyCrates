@@ -45,27 +45,6 @@ public class PrizeManager {
 
         prize = prize.hasPermission(player) ? prize.getAlternativePrize() : prize;
 
-        if (!prize.getItems().isEmpty()) {
-            for (ItemStack item : prize.getItems()) {
-                if (item == null) {
-                    Map<String, String> placeholders = new HashMap<>();
-
-                    placeholders.put("{crate}", prize.getCrateName());
-                    placeholders.put("{prize}", prize.getPrizeName());
-
-                    player.sendRichMessage(Messages.prize_error.getMessage(player, placeholders));
-
-                    continue;
-                }
-
-                if (!MiscUtils.isInventoryFull(player)) {
-                    player.getInventory().addItem(item);
-                } else {
-                    player.getWorld().dropItemNaturally(player.getLocation(), item);
-                }
-            }
-        }
-
         if (!prize.getItemBuilders().isEmpty()) {
             for (ItemBuilder item : prize.getItemBuilders()) {
                 ItemBuilder clone = new ItemBuilder(item).setTarget(player);
