@@ -17,7 +17,3 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
-plugins {
-    id("com.ryderbelserion.feather-settings")
-}

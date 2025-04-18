@@ -1,7 +1,3 @@
-import com.ryderbelserion.feather.tools.formatLog
-import com.ryderbelserion.feather.tools.latestCommitHash
-import com.ryderbelserion.feather.tools.latestCommitMessage
-
 plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.hangar)
@@ -15,11 +11,9 @@ rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}
 
 val isSnapshot = false
 
-val content: String = if (isSnapshot) {
-    formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name, "Crazy-Crew")
-} else {
-    rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
-}
+
+rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+
 
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version
@@ -35,7 +29,7 @@ modrinth {
     versionName.set("${rootProject.name} ${rootProject.version}")
     versionNumber.set(rootProject.version as String)
 
-    changelog.set(content)
+    changelog.set("balls")
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
@@ -63,7 +57,7 @@ hangarPublish {
 
         channel.set(if (isSnapshot) "Snapshot" else "Release")
 
-        changelog.set(content)
+        changelog.set("balls")
 
         platforms {
             paper {
