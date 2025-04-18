@@ -1,89 +1,25 @@
 plugins {
-    alias(libs.plugins.shadowJar)
+    id("root-plugin")
 
-    `paper-plugin`
+    `maven-publish`
 }
 
 project.group = "us.crazycrew.crazycrates"
-project.version = "0.7"
+project.description = "The official API for CrazyCrates!"
+project.version = "0.8"
 
 dependencies {
-    compileOnly(libs.paper)
+    compileOnly(libs.bundles.adventure)
 }
 
-val javaComponent: SoftwareComponent = components["java"]
+publishing {
+    repositories {
+        maven {
+            url = uri("https://repo.crazycrew.us/releases/")
 
-tasks {
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets.main.get().allSource)
-    }
-
-    val javadocJar by creating(Jar::class) {
-        dependsOn.add(javadoc)
-        archiveClassifier.set("javadoc")
-        from(javadoc)
-    }
-
-    publishing {
-        repositories {
-            maven {
-                url = uri("https://repo.crazycrew.us/releases")
-
-                credentials {
-                    this.username = System.getenv("gradle_username")
-                    this.password = System.getenv("gradle_password")
-                }
-
-                //isAllowInsecureProtocol = true
-            }
-        }
-
-        publications {
-            create<MavenPublication>("maven") {
-                artifactId = "api"
-
-                from(javaComponent)
-
-                artifact(sourcesJar)
-                artifact(javadocJar)
-
-                versionMapping {
-                    usage("java-api") {
-                        fromResolutionOf("runtimeClasspath")
-                    }
-
-                    usage("java-runtime") {
-                        fromResolutionResult()
-                    }
-                }
-
-                pom {
-                    name.set("CrazyCrates API")
-                    description.set("The official API of CrazyCrates")
-                    url.set("https://modrinth.com/plugin/crazycrates")
-
-                    licenses {
-                        licenses {
-                            name.set("MIT")
-                            url.set("https://opensource.org/licenses/MIT")
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id.set("ryderbelserion")
-                            name.set("Ryder Belserion")
-                            email.set("no-reply@ryderbelserion.com")
-                        }
-                    }
-
-                    scm {
-                        connection.set("scm:git:git://github.com/Crazy-Crew/CrazyCrates")
-                        developerConnection.set("scm:git:ssh://github.com/Crazy-Crew/CrazyCrates")
-                        url.set("https://github.com/Crazy-Crew/CrazyCrates")
-                    }
-                }
+            credentials {
+                this.username = System.getenv("gradle_username")
+                this.password = System.getenv("gradle_password")
             }
         }
     }

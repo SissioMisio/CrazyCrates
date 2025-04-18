@@ -1,23 +1,12 @@
-rootProject.name = "buildSrc"
-
 dependencyResolutionManagement {
     repositories {
-        maven("https://repo.crazycrew.us/releases")
-
         gradlePluginPortal()
-
         mavenCentral()
     }
-}
 
-pluginManagement {
-    repositories {
-        maven("https://repo.crazycrew.us/releases")
-
-        gradlePluginPortal()
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
     }
-}
-
-plugins {
-    id("com.ryderbelserion.feather-settings")
 }

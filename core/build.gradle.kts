@@ -1,11 +1,14 @@
 plugins {
-    `paper-plugin`
+    id("root-plugin")
 }
 
 dependencies {
-    compileOnly(libs.paper)
+    compileOnly(libs.fusion.core)
+    compileOnly(libs.fusion.api)
 
-    api(projects.crazycratesApi)
+    compileOnly(libs.jetbrains)
 
-    api(libs.vital.paper)
+    api(project(":crazycrates-api"))
+
+    api(libs.jalu)
 }

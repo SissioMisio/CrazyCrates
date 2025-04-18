@@ -1,11 +1,17 @@
-import com.ryderbelserion.feather.enums.Repository
+import org.gradle.accessors.dm.LibrariesForLibs
+
+// Hack which exposes `libs` to this convention plugin
+val libs = the<LibrariesForLibs>()
+
 
 plugins {
-    id("java-plugin")
+    id("root-plugin")
 }
 
 repositories {
-    maven("https://repo.triumphteam.dev/snapshots")
+    maven("https://repo.papermc.io/repository/maven-public/")
+}
 
-    maven(Repository.Paper.url)
+dependencies {
+    compileOnly(libs.paper)
 }
